@@ -33,5 +33,17 @@ mkdir -p ~/.config/nvim
 ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
+if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+
 # Make Zsh default shell (moved to the end)
 chsh -s $(which zsh)
+
+
+# Reload the shell or print a message
+if [ -z "$ZSH_CUSTOM" ]; then
+  echo "Please restart your shell or run 'exec zsh -l' to apply changes."
+else
+  source ~/.zshrc
+fi
