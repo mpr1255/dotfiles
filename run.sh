@@ -36,6 +36,19 @@ fi
 # install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+# Install zellij
+# Download Zellij
+wget https://github.com/zellij-org/zellij/releases/download/v0.38.2/zellij-x86_64-unknown-linux-musl.tar.gz
+
+# Extract the tar file
+tar -xvf zellij-x86_64-unknown-linux-musl.tar.gz
+
+# Make Zellij executable
+chmod +x zellij
+
+# Move Zellij to /usr/local/bin or any other directory in your $PATH
+sudo mv zellij /usr/local/bin/
+
 # install fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
