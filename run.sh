@@ -8,7 +8,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install necessary packages for plugins and other functionality
-sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd -y
+sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find -y
 
 # Install Neovim
 sudo apt install neovim -y
@@ -74,3 +74,6 @@ if [ -z "$ZSH_CUSTOM" ]; then
 else
   source ~/.zshrc
 fi
+
+
+ln -s $(which fdfind) ~/.local/bin/fd
