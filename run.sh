@@ -51,7 +51,7 @@ sudo mv zellij /usr/local/bin/
 
 # install fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+~/.fzf/install -y
 
 # Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
