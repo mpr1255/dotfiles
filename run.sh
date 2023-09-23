@@ -8,7 +8,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install necessary packages for plugins and other functionality
-sudo apt install fzf git bat autojump python3-pip exa ripgrep zoxide -y
+sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd -y
 
 # Install Neovim
 sudo apt install neovim -y
@@ -35,6 +35,10 @@ fi
 
 # install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# install fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 
 # Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
