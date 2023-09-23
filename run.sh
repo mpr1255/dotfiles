@@ -25,8 +25,31 @@ curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh 
 # Clone your dotfiles (containing the .zshrc)
 git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
 
-# Install LazyVim
-git clone https://github.com/klazy/lazyvim.git ~/.lazyvim
+# Install Lazy.nvim and configure it
+nvim --headless -c "lua <<EOF
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable',
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+EOF
+"
+
+# Another command to run setup (if you want)
+nvim --headless -c "lua require('lazy').setup({'folke/which-key.nvim', {'folke/neoconf.nvim', cmd = 'Neoconf'}, 'folke/neodev.nvim'})"
+
+
+
+
+
+
 # Ensure Neovim config directory exists
 mkdir -p ~/.config/nvim
 ln -sf ~/.lazyvim/init.vim ~/.config/nvim/init.vim
