@@ -81,9 +81,3 @@ fi
 
 ln -s $(which fdfind) ~/.local/bin/fd
 
-
-# Launch Zellij
-if [ -z "$ZELLIJ_SESSION" ]; then
-  export ZELLIJ_SESSION=1
-  zellij
-fi
