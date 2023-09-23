@@ -33,6 +33,9 @@ if [[ ! -r "${MCFLY_HISTFILE}" ]]; then
   return 1
 fi
 
+# install ohmyzsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 # Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
 
