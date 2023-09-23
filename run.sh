@@ -8,12 +8,13 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install necessary packages for plugins and other functionality
-sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find autojump libfuse2 -y
+sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find autojump libfuse2 nnn -y
 
 # Install Neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 chmod u+x nvim.appimage
-./nvim.appimage
+sudo mv nvim.appimage /usr/local/bin/nvim
+
 
 # Install LazyGit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')

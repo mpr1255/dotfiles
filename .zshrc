@@ -9,7 +9,12 @@ plugins=(git zsh-autosuggestions autojump history pip python)
 alias ls="exa"
 alias ll="exa -alh"
 alias tree="exa --tree"
-alias cat="bat"
+alias cat="bat -p"
+alias catdoc="soffice --headless --cat"
+alias n="nnn -d -e -Tt -x -A -u" #https://github.com/jarun/nnn/wiki/Usage#program-options 
+alias s="source ./venv/bin/activate"
+
+
 # Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh
 # Additional settings
