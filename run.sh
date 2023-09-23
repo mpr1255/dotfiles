@@ -19,11 +19,6 @@ if [ ! -f "/usr/local/bin/nvim" ]; then
     sudo mv nvim.appimage /usr/local/bin/nvim
 fi
 
-# Install LazyGit
-if ! command -v lazygit &> /dev/null; then
-    # Code to install LazyGit
-fi
-
 # Install McFly
 if ! command -v mcfly &> /dev/null; then
     curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
