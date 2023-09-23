@@ -11,7 +11,9 @@ sudo apt install zsh -y
 sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find -y
 
 # Install Neovim
-sudo apt install neovim -y
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+chmod u+x nvim.appimage
+./nvim.appimage
 
 # Install LazyGit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
@@ -77,3 +79,11 @@ fi
 
 
 ln -s $(which fdfind) ~/.local/bin/fd
+
+export ZELLIJ_CONFIG_FILE_PATH=~/dotfiles/zellij-config.yml
+
+# Launch Zellij
+if [ -z "$ZELLIJ_SESSION" ]; then
+  export ZELLIJ_SESSION=1
+  zellij
+fi
