@@ -26,6 +26,13 @@ if ! command -v mcfly &> /dev/null; then
     # Install mcfly here
 fi
 
+default_histfile="${HISTFILE:-$HOME/.zsh_history}"
+export MCFLY_HISTFILE="${MCFLY_HISTFILE:-$default_histfile}"
+if [[ ! -r "${MCFLY_HISTFILE}" ]]; then
+  echo "McFly: ${MCFLY_HISTFILE} does not exist or is not readable. Please fix this or set MCFLY_HISTFILE to something else before using McFly."
+  return 1
+fi
+
 # Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
 
