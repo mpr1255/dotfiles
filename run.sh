@@ -53,8 +53,10 @@ chmod +x zellij
 sudo mv zellij /usr/local/bin/
 
 # install fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install -y
+if [ ! -d "~/.fzf" ]; then
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	~/.fzf/install -y
+fi
 
 # Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
@@ -62,6 +64,13 @@ mkdir -p ~/.config/nvim
 # Symlink init.lua for Neovim and .zshrc for Zsh
 ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
+
+# Reload the shell or print a message
+if [ -z "$ZSH_CUSTOM" ]; then
+  echo "Please restart your shell or run 'exec zsh -l' to apply changes."
+else
+  source ~/.zshrc
+fi
 
 if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -71,12 +80,6 @@ fi
 chsh -s $(which zsh)
 
 
-# Reload the shell or print a message
-if [ -z "$ZSH_CUSTOM" ]; then
-  echo "Please restart your shell or run 'exec zsh -l' to apply changes."
-else
-  source ~/.zshrc
-fi
 
 
 ln -s $(which fdfind) ~/.local/bin/fd
