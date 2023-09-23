@@ -8,7 +8,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install necessary packages for plugins and other functionality
-sudo apt install fzf git bat autojump python3-pip exa ripgrep -y
+sudo apt install fzf git bat autojump python3-pip exa ripgrep zoxide -y
 
 # Install Neovim
 sudo apt install neovim -y
