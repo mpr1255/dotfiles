@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo chmod -x /etc/update-motd.d/*
 
 # Update and upgrade
 sudo apt update && sudo apt upgrade -y
@@ -13,15 +14,13 @@ sudo apt install fzf git bat autojump python3-pip exa ripgrep -y
 sudo apt install neovim -y
 
 # Install LazyGit
-sudo add-apt-repository ppa:lazygit-team/release -y
-sudo apt-get update
-sudo apt-get install lazygit -y
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazygit.tar.gz lazygit
+sudo install lazygit /usr/local/bin
 
 # Install McFly
-wget https://github.com/cantino/mcfly/releases/download/v0.5.10/mcfly-v0.5.10-x86_64-unknown-linux-gnu.tar.gz
-tar xzf mcfly-v0.5.10-x86_64-unknown-linux-gnu.tar.gz
-sudo mv mcfly /usr/local/bin
-rm mcfly-v0.5.10-x86_64-unknown-linux-gnu.tar.gz
+curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
 
 # Clone your dotfiles (containing the .zshrc)
 git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
