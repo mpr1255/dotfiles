@@ -45,3 +45,6 @@ rga-fzf() {
     xdg-open "$file"
 }
 eval "$(mcfly init zsh)"
+
+export PATH=$PATH:/usr/bin/batcat
+export ZELLIJ_CONFIG_FILE_PATH=~/dotfiles/zellij-config.yml

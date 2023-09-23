@@ -8,7 +8,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install necessary packages for plugins and other functionality
-sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find autojump -y
+sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find autojump libfuse2 -y
 
 # Install Neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
@@ -80,7 +80,6 @@ fi
 
 ln -s $(which fdfind) ~/.local/bin/fd
 
-export ZELLIJ_CONFIG_FILE_PATH=~/dotfiles/zellij-config.yml
 
 # Launch Zellij
 if [ -z "$ZELLIJ_SESSION" ]; then
