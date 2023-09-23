@@ -20,23 +20,20 @@ tar xf lazygit.tar.gz lazygit
 sudo install lazygit /usr/local/bin
 
 # Install McFly
-curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
+# Check if mcfly is already installed
+if ! command -v mcfly &> /dev/null; then
+	curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
+    # Install mcfly here
+fi
 
 # Clone your dotfiles (containing the .zshrc)
 git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
 
-# Install Lazy.nvim and configure it
-ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
-
-# Another command to run setup (if you want)
-nvim --headless -c "lua require('lazy').setup({'folke/which-key.nvim', {'folke/neoconf.nvim', cmd = 'Neoconf'}, 'folke/neodev.nvim'})"
-
-
-# Ensure Neovim config directory exists
+# Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
-ln -sf ~/.lazyvim/init.vim ~/.config/nvim/init.vim
 
-# Symlink .zshrc
+# Symlink init.lua for Neovim and .zshrc for Zsh
+ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
 # Make Zsh default shell (moved to the end)
