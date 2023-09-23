@@ -8,7 +8,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install necessary packages for plugins and other functionality
-sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find -y
+sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find autojump -y
 
 # Install Neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
