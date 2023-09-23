@@ -26,9 +26,6 @@ if ! command -v mcfly &> /dev/null; then
     # Install mcfly here
 fi
 
-# Clone your dotfiles (containing the .zshrc)
-git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
-
 # Make sure the Neovim config directory exists
 mkdir -p ~/.config/nvim
 
