@@ -10,7 +10,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install zsh -y
 
 # Install packages
-sudo apt install git bat autojump python3-pip exa ripgrep zoxide fd-find autojump libfuse2 nnn   trash-cli -y
+sudo apt install git bat exiftool openjdk-11-jdk autojump python3-pip exa ripgrep zoxide fd-find autojump libfuse2 nnn   trash-cli -y
 
 # Install Neovim
 if [ ! -f "/usr/local/bin/nvim" ]; then

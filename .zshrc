@@ -58,5 +58,5 @@ export ZELLIJ_CONFIG_FILE_PATH=~/dotfiles/zellij-config.yml
 # Launch Zellij
 if [ -z "$ZELLIJ_SESSION" ]; then
   export ZELLIJ_SESSION=1
-  zellij
+  zellij attach --index 0
 fi
