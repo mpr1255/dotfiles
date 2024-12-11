@@ -3,8 +3,8 @@
 {
   home = {
     stateVersion = "24.05";
-    username = "mrobertson";
-    homeDirectory = "/home/mrobertson";
+    username = "root";
+    homeDirectory = "/root";
     
     sessionVariables = {
       EDITOR = "nvim";
@@ -88,7 +88,7 @@
 
     file = {
       ".config" = {
-        source = /home/mrobertson/dotfiles/config;
+        source = /root/dotfiles/config;
         recursive = true;
       };
     };
