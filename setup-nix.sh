@@ -39,6 +39,8 @@ echo "Downloading home.nix configuration..."
 curl -sSL https://raw.githubusercontent.com/mpr1255/dotfiles/refs/heads/master/home.nix \
     -o "$HOMEDIR/.config/home-manager/home.nix"
 
+echo 'exec /root/.nix-profile/bin/zsh' >> ~/.bashrc
 echo "Setup complete. Previous configuration backed up as home.nix.bak if it existed."
 echo "Home directory set to: $HOMEDIR"
 echo "Username set to: $USERNAME"
+echo "exec /root/.nix-profile/bin/zsh added to ~/.bashrc"
