@@ -43,7 +43,6 @@
       gh 
       unison 
       zellij 
-      unrar 
       git 
       delta 
       ripgrep 
