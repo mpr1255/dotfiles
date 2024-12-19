@@ -413,14 +413,21 @@ neovim = {
         lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
       in
       ''
-        -- Set parser install location before lazy setup
-        vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/treesitter")
-        require('nvim-treesitter.configs').setup({
-          parser_install_dir = vim.fn.stdpath("data") .. "/treesitter",
-          ensure_installed = {},
-          highlight = { enable = true },
-          indent = { enable = true },
-        })
+        -- Bootstrap lazy.nvim
+        local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+        if not vim.loop.fs_stat(lazypath) then
+          vim.fn.system({
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "https://github.com/folke/lazy.nvim.git",
+            "--branch=stable",
+            lazypath,
+          })
+        end
+        vim.opt.rtp:prepend(lazypath)
+
+        -- Set up lazy.nvim
         require("lazy").setup({
           defaults = {
             lazy = true,
@@ -436,14 +443,24 @@ neovim = {
             { "williamboman/mason-lspconfig.nvim", enabled = false },
             { "williamboman/mason.nvim", enabled = false },
             { import = "plugins" },
-            { "nvim-treesitter/nvim-treesitter", opts = { 
-                ensure_installed = {},
-                parser_install_dir = vim.fn.stdpath("data") .. "/treesitter"
-              }
+            {
+              "nvim-treesitter/nvim-treesitter",
+              build = ":TSUpdate",
+              config = function()
+                local parser_install_dir = vim.fn.stdpath("data") .. "/treesitter"
+                vim.opt.runtimepath:append(parser_install_dir)
+                
+                require("nvim-treesitter.configs").setup({
+                  parser_install_dir = parser_install_dir,
+                  ensure_installed = {},
+                  highlight = { enable = true },
+                  indent = { enable = true },
+                })
+              end,
             },
           },
         })
       '';
-  };
- };
-}
+    }; # end neovim config
+  }; # end programs
+} # end top-level
