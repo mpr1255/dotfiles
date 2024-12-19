@@ -352,6 +352,7 @@ neovim = {
     ];
     plugins = with pkgs.vimPlugins; [
       lazy-nvim
+      nvim-treesitter
     ];
     extraLuaConfig =
       let
