@@ -1,0 +1,8 @@
+// layout_file.kdl
+
+layout {
+    
+    pane command="zsh" {
+        args "-c" "source ~/.zprofile"
+    }
+}
