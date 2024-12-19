@@ -3,8 +3,8 @@
 {
   home = {
     stateVersion = "24.05";
-    username = "root";
-    homeDirectory = "/root";
+    username = "ubuntu";
+    homeDirectory = "/home/ubuntu";
     
     sessionVariables = {
       EDITOR = "nvim";
@@ -87,7 +87,7 @@
 
     file = {
       ".config" = {
-        source = /root/dotfiles/config;
+        source = /home/ubuntu/dotfiles/config;
         recursive = true;
       };
     };
