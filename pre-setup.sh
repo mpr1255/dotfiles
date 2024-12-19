@@ -11,6 +11,6 @@ if ! id "ubuntu" &>/dev/null; then
 fi
 
 # Install essential dependencies as root
-apt-get update && apt-get install -y curl git xz-utils systemd build-essential
+apt-get update && apt-get install -y curl git xz-utils systemd build-essential mosh
 
 echo "Basic system setup complete. Now run setup-nix.sh as ubuntu user."

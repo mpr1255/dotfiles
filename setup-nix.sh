@@ -2,7 +2,6 @@
 set -euo pipefail
 
 HOMEDIR="/home/ubuntu"
-REPO_DIR="$HOMEDIR/dotfiles-repo"  # Where the repo is cloned
 CONFIG_DIR="$HOMEDIR/dotfiles/config"  # Where config files should end up
 
 # Create required directories
@@ -11,17 +10,17 @@ mkdir -p "$CONFIG_DIR"
 
 # Copy files to their locations
 echo "Setting up configuration files..."
-cp "$REPO_DIR/home.nix" "$HOMEDIR/.config/home-manager/home.nix"
+cp "$(pwd)/home.nix" "$HOMEDIR/.config/home-manager/home.nix"
 
 # Set up config directories
 mkdir -p "$CONFIG_DIR/yazi"
 mkdir -p "$CONFIG_DIR/zellij/layouts"
 
 # Copy yazi configs
-cp -r "$REPO_DIR/yazi/"* "$CONFIG_DIR/yazi/"
+cp -r "$(pwd)/yazi/"* "$CONFIG_DIR/yazi/"
 
 # Copy zellij configs
-cp -r "$REPO_DIR/zellij/"* "$CONFIG_DIR/zellij/"
+cp -r "$(pwd)/zellij/"* "$CONFIG_DIR/zellij/"
 
 # Install Nix if not present
 if ! command -v nix &> /dev/null; then
