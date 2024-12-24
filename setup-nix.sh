@@ -17,7 +17,7 @@ mkdir -p "$CONFIG_DIR/yazi"
 mkdir -p "$CONFIG_DIR/zellij/layouts"
 
 # Copy yazi configs
-cp -r "$(pwd)/yazi/"* "$CONFIG_DIR/yazi/"
+#cp -r "$(pwd)/yazi/"* "$CONFIG_DIR/yazi/"
 
 # Copy zellij configs
 cp -r "$(pwd)/zellij/"* "$CONFIG_DIR/zellij/"
