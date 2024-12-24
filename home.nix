@@ -22,7 +22,6 @@
       pandoc 
       ripgrep-all 
       poppler_utils 
-      tailscale 
       go 
       flock 
       python3 

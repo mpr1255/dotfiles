@@ -1,3 +1,7 @@
+1. copy paste the following, which is like a pre-setup script
+
+```bash
+
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -21,4 +25,26 @@ chmod 600 /home/ubuntu/.ssh/authorized_keys
 apt-get update
 apt-get install -y curl git xz-utils systemd build-essential mosh
 
-echo "Setup complete! You can now SSH in as the ubuntu user using your SSH key"
+echo "Setup complete! now dropping to ubuntu user"
+
+exec su - ubuntu
+
+```
+
+2. Then it does that, paste this in
+
+```bash
+git clone https://github.com/mpr1255/dotfiles.git dotfiles && cd dotfiles && chmod +x *.sh && ./setup-nix.sh
+
+exec $SHELL
+
+if ! command -v tailscale &> /dev/null; then
+    echo "Installing tailscale..."
+    curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up --ssh
+fi
+
+
+
+```
+3. 

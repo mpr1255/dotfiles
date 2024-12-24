@@ -38,11 +38,6 @@ if ! command -v home-manager &> /dev/null; then
     nix-shell '<home-manager>' -A install
 fi
 
-if ! command -v tailscale &> /dev/null; then
-    echo "Installing tailscale..."
-    curl -fsSL https://tailscale.com/install.sh | sh
-fi
-
 # Set up zsh in bashrc
 if ! grep -q "exec.*zsh" "$HOMEDIR/.bashrc"; then
     echo 'exec $HOME/.nix-profile/bin/zsh' >> "$HOMEDIR/.bashrc"
