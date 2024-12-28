@@ -62,7 +62,10 @@
       entr 
       exiftool 
       fd 
-      yazi 
+     (import (fetchTarball {
+      url = "https://github.com/NixOS/nixpkgs/archive/799bc8d7b16e6779f0105713e6794899133c4a38.tar.gz";
+      sha256 = "1havmcslqbxwbh0ibfxjjsn073varwdxrgwjhb5cvf11s80ddmc6";
+    }) {}).yazi
       pigz 
       pipx 
       docker 
