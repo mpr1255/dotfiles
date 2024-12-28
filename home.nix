@@ -71,7 +71,6 @@
       docker 
       curl 
       fzf 
-      zsh-fzf-tab 
       ffmpeg 
       pv 
       gron 
@@ -274,10 +273,6 @@
         {
           name = "zsh-syntax-highlighting";
           src = pkgs.zsh-syntax-highlighting;
-        }
-        {
-          name = "fzf-tab";
-          src = pkgs.zsh-fzf-tab;
         }
         {
           name = "spaceship-prompt";
