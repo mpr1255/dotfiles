@@ -320,7 +320,7 @@ mouse_mode true
 //   - system (default)
 //   - primary
 //
-copy_clipboard "primary"
+//copy_clipboard "primary"
 
 // Enable or disable automatic copy (and clear) of selection when releasing mouse
 // Default: true
