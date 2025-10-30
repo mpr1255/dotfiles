@@ -37,6 +37,8 @@ HISTSIZE="10000"
 SAVEHIST="10000"
 HISTFILE="$HOME/.zsh_history"
 mkdir -p "$(dirname "$HISTFILE")"
+# Create history file if it doesn't exist
+touch "$HISTFILE"
 setopt HIST_FCNTL_LOCK
 setopt HIST_IGNORE_DUPS
 unsetopt HIST_IGNORE_ALL_DUPS
