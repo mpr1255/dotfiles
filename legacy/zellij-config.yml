@@ -1,3 +1,0 @@
-keybinds:
-  - action: ToggleTab
-    key: [Ctrl: 't', Char: 'z']

@@ -1,0 +1,137 @@
+[mgr]
+ratio          = [ 1, 3, 4 ]
+sort_by        = "mtime"
+sort_sensitive = false
+sort_dir_first = false
+sort_reverse   = true
+show_hidden    = false
+show_symlink   = true
+linemode = "file_info"
+
+[preview]
+wrap = "yes"
+tab_size = 2
+
+[plugin]
+prepend_previewers = [
+	# Archive previewer
+	{ mime = "application/*zip",            run = "ouch" },
+	{ mime = "application/x-tar",           run = "ouch" },
+	{ mime = "application/x-bzip2",         run = "ouch" },
+	{ mime = "application/x-7z-compressed", run = "ouch" },
+	{ mime = "application/x-rar",           run = "ouch" },
+  { mime = "application/x-xz",            run = "ouch" },
+	{ mime = "application/xz",              run = "ouch" },
+  { name = "*.html", run = "w3m" },
+  { name = "*.mhtml", run = "w3m" },
+  { name = "*.mht", run = "w3m" },
+  { name = "*.pdf", run = "doc-text" },
+  { name = "*.PDF", run = "doc-text" },
+  { name = "*.doc", run = "doc-text" },
+  { name = "*.DOC", run = "doc-text" },
+  { name = "*.docx", run = "doc-text" },
+  { name = "*.DOCX", run = "doc-text" },
+  { name = "*.rtf", run = "doc-text" },
+  { name = "*.RTF", run = "doc-text" },
+]
+
+[opener]
+archive = [
+	{ run = 'unar "$1"', desc = "Extract here" },
+]
+text = [
+	{ run = 'nvim "$@"', block = true },
+]
+browser = [
+	{ run = 'xdg-open "$@"', block = true, for = "linux" },
+]
+
+mhtml_browser = [
+  { run = 'mhtml-to-html "$1" | w3m -T text/html | nvim', block = true },
+]
+
+pdf_text = [
+	{ run = 'pdftotext "$1" - | nvim', block = true },
+]
+
+doc_text = [
+	{ run = 'antiword "$1" | nvim', block = true },
+]
+
+docx_text = [
+	{ run = 'pandoc "$1" -t plain | nvim', block = true },
+]
+
+w3m_open = [
+	{ run = 'w3m "$@" | nvim', block = true},
+]
+vd = [
+	{ run = 'vd "$@"', block = true},
+]
+edit = [
+	{ run = '$EDITOR "$@"', block = true },
+]
+bulk_rename = [
+	{ run = '$EDITOR -w "$@"', block = true },
+]
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open", for = "linux" },
+]
+
+open_csv_default = [
+	{ run = 'xdg-open "$@"', desc = "Open (Default App)", for = "linux" },
+]
+
+reveal = [
+	{ run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
+	{ run = '''exiftool "$1"; echo "Press enter to exit"; read''', block = true, desc = "Show EXIF", for = "unix" },
+]
+extract = [
+{ run = 'sh -c "[ -e \"${1%.*}\" ] || 7z x -spe -sccUTF-8 -o\"${1%.*}\" \"$1\"" -- "$@"', desc = "Extract here with 7z", for = "unix" },
+]
+play = [
+	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, desc = "Show media info", for = "unix" },
+]
+
+[open]
+rules = [
+	{ name = "bulk-rename.txt", use = [ "bulk_rename" ] },
+	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+	{ name = "*.csv", use = [ "vd", "open_csv_default" ] },
+	{ name = "*.html", use = ["w3m_open", "browser", "text" ] },
+	{ name = "*.mhtml", use = [ "mhtml_browser"] },
+	{ name = "*.mht", use = [ "mhtml_browser"] },
+	{ name = "*.pdf", use = [ "pdf_text", "open" ] },
+	{ name = "*.PDF", use = [ "pdf_text", "open" ] },
+	{ name = "*.doc", use = [ "doc_text", "open" ] },
+	{ name = "*.DOC", use = [ "doc_text", "open" ] },
+	{ name = "*.docx", use = [ "docx_text", "open" ] },
+	{ name = "*.DOCX", use = [ "docx_text", "open" ] },
+	{ mime = "text/*",  use = [ "edit", "vd", "reveal", "browser"  ] },
+	{ mime = "image/*", use = [ "open", "reveal" ] },
+	{ mime = "video/*", use = [ "play", "reveal" ] },
+	{ mime = "audio/*", use = [ "play", "reveal" ] },
+	{ mime = "inode/x-empty", use = [ "edit", "reveal" ] },
+	{ mime = "application/json", use = [ "edit", "reveal" ] },
+	{ mime = "*/javascript",     use = [ "edit", "reveal" ] },
+	{ mime = "application/zip",             use = [ "extract", "reveal" ] },
+	{ mime = "application/gzip",            use = [ "extract", "reveal" ] },
+	{ mime = "application/x-tar",           use = [ "extract", "reveal" ] },
+	{ mime = "application/x-bzip",          use = [ "extract", "reveal" ] },
+	{ mime = "application/x-bzip2",         use = [ "extract", "reveal" ] },
+	{ mime = "application/x-7z-compressed", use = [ "extract", "reveal" ] },
+	{ mime = "application/x-rar",           use = [ "extract", "reveal" ] },
+	{ mime = "application/xz",              use = [ "extract", "reveal" ] },
+	{ name = "*.db", use = [ "vd"] },
+	{ name = "*.sqlite", use = [ "vd"] },
+	{ mime = "*", use = [ "open", "reveal" ] },
+]
+
+[tasks]
+micro_workers    = 10
+macro_workers    = 25
+bizarre_retry    = 5
+image_alloc      = 536870912  # 512MB
+image_bound      = [ 0, 0 ]
+suppress_preload = false

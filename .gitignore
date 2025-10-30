@@ -1,0 +1,21 @@
+# Ignore sensitive files
+.secrets
+*.key
+*.pem
+*_credentials
+*credentials.json
+
+# Ignore backup files
+*.backup
+*.bak
+*~
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore editor files
+.vscode/
+.idea/
+*.swp
+*.swo
