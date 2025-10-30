@@ -164,10 +164,6 @@ function rga-fzf() {
             --bind "enter:execute-silent(echo {} | xargs -n 1 xdg-open)"
 }
 
-function nixi() {
-    nix profile install nixpkgs#"$1"
-}
-
 # Tailscale exit node switcher (customize with your own exit nodes)
 # Example usage after customization: ts frankfurt, ts none
 # function ts() {
