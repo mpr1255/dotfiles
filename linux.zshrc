@@ -1,10 +1,6 @@
 # ~/.zshrc for Linux systems
 # Sanitized version without API keys or Mac-specific paths
 
-# pipx stuff
-export PIPX_HOME="$HOME/.local/pipx"
-export PIPX_BIN_DIR="$HOME/.local/bin"
-
 # --- Basic Zsh Setup ---
 typeset -U path cdpath fpath manpath
 
@@ -198,13 +194,12 @@ alias zi='zoxide query -i'
 
 # Tool aliases
 alias sqlite='sqlite3'
-alias squ='sqlite-utils'
-alias pip='uv pip'
+alias squ='uvx sqlite-utils'
 alias r='radian'
 alias zl='zellij'
 alias fabric='fabric-ai'
 
-# Add pipx path
+# Local bin path
 export PATH="$PATH:$HOME/.local/bin"
 
 # Source fzf-tab if it exists
