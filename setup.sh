@@ -102,6 +102,23 @@ for tool in ripgrep eza zoxide neovim sqlite3 mpv w3m; do
     fi
 done
 
+# Install document processing tools for yazi
+echo "Installing document processing tools..."
+for tool in antiword pandoc poppler-utils; do
+    if ! dpkg -l | grep -q "^ii  $tool"; then
+        echo "Installing $tool..."
+        $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool"
+    fi
+done
+
+# Install Python-based tools via uv
+echo "Installing Python-based CLI tools..."
+if command -v uv &> /dev/null; then
+    # Install csvkit and visidata for data processing
+    uv tool install csvkit 2>/dev/null || echo "Warning: Could not install csvkit"
+    uv tool install visidata 2>/dev/null || echo "Warning: Could not install visidata"
+fi
+
 # Install fzf properly with setup
 if ! command -v fzf &> /dev/null; then
     echo "Installing fzf..."

@@ -42,6 +42,11 @@ rm -f "$CONFIG_DIR/yazi/init.lua.bak"
 sed -i.bak "s|subl|\$EDITOR|g" "$CONFIG_DIR/yazi/keymap.toml"
 rm -f "$CONFIG_DIR/yazi/keymap.toml.bak"
 
+# Sanitize yazi theme.toml - comment out catppuccin theme
+sed -i.bak 's|^\[flavor\]|# Optional: Install catppuccin theme with:\n#   ya pkg add yazi-rs/flavors:catppuccin-mocha\n# Then uncomment:\n# [flavor]|' "$CONFIG_DIR/yazi/theme.toml"
+sed -i.bak 's|^dark = |# dark = |' "$CONFIG_DIR/yazi/theme.toml"
+rm -f "$CONFIG_DIR/yazi/theme.toml.bak"
+
 # Sanitize yazi yazi.toml - replace Mac-specific commands
 # Replace 'open -a "Brave Browser"' with xdg-open
 sed -i.bak 's|open -a "Brave Browser"|xdg-open|g' "$CONFIG_DIR/yazi/yazi.toml"
@@ -49,8 +54,9 @@ sed -i.bak 's|open -a skim|xdg-open|g' "$CONFIG_DIR/yazi/yazi.toml"
 # Replace macOS 'open' commands with xdg-open
 sed -i.bak 's|{ run = '\''open "\$@"'\'', *desc = "Open", for = "macos" }|{ run = '\''xdg-open "\$@"'\'', desc = "Open", for = "linux" }|g' "$CONFIG_DIR/yazi/yazi.toml"
 sed -i.bak 's|{ run = '\''open -R "\$1"'\''|{ run = '\''xdg-open "$(dirname "\$1")"'\''|g' "$CONFIG_DIR/yazi/yazi.toml"
-# Replace subl references
-sed -i.bak 's|subl|\$EDITOR|g' "$CONFIG_DIR/yazi/yazi.toml"
+# Replace subl with $EDITOR only in the subl opener's 'run' command
+# Keep the 'subl' opener name and references to it - it will just run $EDITOR on Linux
+sed -i.bak "s|run = 'subl|run = '\\\$EDITOR|g" "$CONFIG_DIR/yazi/yazi.toml"
 rm -f "$CONFIG_DIR/yazi/yazi.toml.bak"
 
 echo "Done! Configs have been copied and sanitized for Linux."

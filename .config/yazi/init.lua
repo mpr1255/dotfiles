@@ -44,10 +44,6 @@ function Linemode:file_info()
 	}
 end
 
--- === Yazi Plugins ===
--- zoxide and session are built-in preset plugins (no installation needed)
--- fr, compress, and smart-enter are included in .config/yazi/plugins/
-
 require("zoxide"):setup({
 	update_db = true,
 })
