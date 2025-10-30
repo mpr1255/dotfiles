@@ -22,6 +22,22 @@ This single script will:
 
 After it completes, just SSH as `ubuntu@your-server-ip` and everything works.
 
+**After first login, verify setup:**
+
+```bash
+# Check if dotfiles installed
+ls ~/dotfiles
+
+# Check if tools installed
+which yazi zellij starship
+
+# If not installed, run manually:
+git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./setup.sh
+exec $SHELL
+```
+
 ---
 
 ### Option 2: Simple Setup (existing Linux system)
