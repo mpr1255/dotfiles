@@ -53,74 +53,52 @@ fi
 
 echo "Detected package manager: $PKG_MANAGER"
 
-# Update package lists
-echo "Updating package lists..."
-if [ "$PKG_MANAGER" = "apt" ]; then
-    sudo apt-get update
-elif [ "$PKG_MANAGER" = "dnf" ]; then
-    sudo dnf check-update || true
+# Check if we need to install anything
+NEEDS_INSTALL=false
+for tool in zsh git curl wget ripgrep bat eza zoxide fzf nvim sqlite3 mpv w3m; do
+    if ! command -v $tool &> /dev/null; then
+        NEEDS_INSTALL=true
+        break
+    fi
+done
+
+# Only update package lists if we need to install something
+if [ "$NEEDS_INSTALL" = true ]; then
+    echo "Updating package lists..."
+    if [ "$PKG_MANAGER" = "apt" ]; then
+        sudo apt-get update
+    elif [ "$PKG_MANAGER" = "dnf" ]; then
+        sudo dnf check-update || true
+    fi
+else
+    echo "All system packages already installed, skipping apt update"
 fi
 
-# Install basic tools
-echo "Installing basic tools..."
-BASIC_TOOLS=(
-    "zsh"
-    "git"
-    "curl"
-    "wget"
-    "build-essential"  # apt-specific, need to handle per distro
-)
-
-# Install tools (handling package name differences)
+# Install basic tools only if needed
 for tool in zsh git curl wget; do
     if ! command -v $tool &> /dev/null; then
         echo "Installing $tool..."
         $INSTALL_CMD $tool
-    else
-        echo "$tool already installed"
     fi
 done
 
-# Install build-essential or equivalent
-if [ "$PKG_MANAGER" = "apt" ]; then
-    $INSTALL_CMD build-essential
-elif [ "$PKG_MANAGER" = "dnf" ]; then
-    $INSTALL_CMD gcc gcc-c++ make
-elif [ "$PKG_MANAGER" = "pacman" ]; then
-    $INSTALL_CMD base-devel
+# Install build tools only if gcc not present
+if ! command -v gcc &> /dev/null; then
+    echo "Installing build tools..."
+    if [ "$PKG_MANAGER" = "apt" ]; then
+        $INSTALL_CMD build-essential
+    elif [ "$PKG_MANAGER" = "dnf" ]; then
+        $INSTALL_CMD gcc gcc-c++ make
+    elif [ "$PKG_MANAGER" = "pacman" ]; then
+        $INSTALL_CMD base-devel
+    fi
 fi
 
-# Install modern CLI tools
-echo "Installing modern CLI tools..."
-TOOLS=(
-    "fd-find"      # apt: fd-find, dnf/pacman: fd
-    "ripgrep"      # rg
-    "bat"
-    "eza"          # modern ls
-    "zoxide"       # smart cd
-    "fzf"
-    "neovim"
-    "sqlite3"
-    "7zip"
-    "mpv"
-    "w3m"
-)
-
-# Tool name mapping for different package managers
-declare -A TOOL_NAMES
-if [ "$PKG_MANAGER" = "apt" ]; then
-    TOOL_NAMES["fd"]="fd-find"
-else
-    TOOL_NAMES["fd"]="fd"
-fi
-
-# Install tools with error handling
+# Install modern CLI tools only if needed
 for tool in ripgrep bat eza zoxide fzf neovim sqlite3 mpv w3m; do
-    if ! command -v $tool &> /dev/null; then
+    if ! command -v $tool &> /dev/null && ! command -v nvim &> /dev/null; then
         echo "Installing $tool..."
-        $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool (may need manual installation)"
-    else
-        echo "$tool already installed"
+        $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool"
     fi
 done
 
@@ -129,16 +107,11 @@ if ! command -v fd &> /dev/null && ! command -v fdfind &> /dev/null; then
     echo "Installing fd..."
     if [ "$PKG_MANAGER" = "apt" ]; then
         $INSTALL_CMD fd-find
-        # Create symlink for apt's fd-find -> fd
-        if [ ! -L "$HOME/.local/bin/fd" ]; then
-            mkdir -p "$HOME/.local/bin"
-            ln -s "$(which fdfind)" "$HOME/.local/bin/fd" 2>/dev/null || true
-        fi
+        mkdir -p "$HOME/.local/bin"
+        ln -sf "$(which fdfind)" "$HOME/.local/bin/fd" 2>/dev/null || true
     else
         $INSTALL_CMD fd
     fi
-else
-    echo "fd already installed"
 fi
 
 # Install Rust (needed for cargo tools)
