@@ -4,7 +4,27 @@ Public dotfiles for setting up a new Linux system (e.g., Hetzner bare metal serv
 
 ## Quick Setup Options
 
-### Option 1: Simple Setup (if you already have a user account)
+### Option 1: Automated Hetzner Bootstrap (RECOMMENDED)
+
+**For fresh Hetzner servers in rescue mode** - just copy-paste this one command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mpr1255/dotfiles/master/hetzner-bootstrap.sh | bash
+```
+
+This single script will:
+- Set up RAID-0 across both NVMe drives
+- Install Ubuntu 24.04 via installimage
+- Create `ubuntu` user with your SSH key
+- Set up passwordless sudo
+- Clone and install all dotfiles automatically
+- Reboot into a fully configured system
+
+After it completes, just SSH as `ubuntu@your-server-ip` and everything works.
+
+---
+
+### Option 2: Simple Setup (existing Linux system)
 
 If you already have a non-root user account with sudo access:
 
@@ -17,7 +37,7 @@ chmod +x *.sh
 exec $SHELL
 ```
 
-### Option 2: Full Hetzner Server Setup (from root)
+### Option 3: Manual Hetzner Setup (step-by-step)
 
 For a fresh Hetzner server where you need to create a user first:
 
@@ -75,10 +95,11 @@ fi
 
 ## Contents
 
+- `hetzner-bootstrap.sh` - **[🚀 MAIN SCRIPT]** One-command Hetzner setup (RAID + OS + user + dotfiles)
 - `linux.zshrc` - Zsh configuration for Linux (no API keys)
 - `.config/yazi/` - Yazi file manager configuration
 - `.config/zellij/` - Zellij terminal multiplexer configuration
-- `pre-setup.sh` - **[Run as root]** Creates user, sets up SSH (for fresh servers only)
+- `pre-setup.sh` - **[Manual option]** Creates user, sets up SSH (for fresh servers only)
 - `setup.sh` - **[Run as user]** Installs all tools and configs (idempotent, safe to re-run)
 - `refresh_from_mac.sh` - **[Run on Mac]** Updates repo from Mac configs (idempotent)
 
