@@ -75,7 +75,7 @@ else
 fi
 
 # Install basic tools only if needed
-for tool in zsh git curl wget; do
+for tool in zsh git curl wget unzip; do
     if ! command -v $tool &> /dev/null; then
         echo "Installing $tool..."
         $INSTALL_CMD $tool
