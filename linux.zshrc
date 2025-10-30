@@ -91,17 +91,17 @@ ZSH_AUTOSUGGEST_STRATEGY=(history match_prev_cmd)
 
 # --- Tool Initializations ---
 
-# fzf (Keybindings and fuzzy completion)
-if command -v fzf &> /dev/null; then
-  source <(fzf --zsh)
-fi
-
-# zoxide (Smarter cd)
+# zoxide (Smarter cd) - init BEFORE fzf
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
 fi
 
-# mcfly
+# fzf (Keybindings and fuzzy completion) - must come BEFORE mcfly
+if command -v fzf &> /dev/null; then
+  source <(fzf --zsh)
+fi
+
+# mcfly - must come AFTER fzf to properly override Ctrl+R
 if command -v mcfly &> /dev/null; then
   eval "$(mcfly init zsh)"
 fi
