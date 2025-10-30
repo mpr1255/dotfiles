@@ -95,20 +95,37 @@ if ! command -v gcc &> /dev/null; then
 fi
 
 # Install modern CLI tools only if needed
-for tool in ripgrep bat eza zoxide fzf neovim sqlite3 mpv w3m; do
+for tool in ripgrep eza zoxide fzf neovim sqlite3 mpv w3m; do
     if ! command -v $tool &> /dev/null && ! command -v nvim &> /dev/null; then
         echo "Installing $tool..."
         $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool"
     fi
 done
 
-# Install fd-find (special case)
+# Install bat (Ubuntu installs as 'batcat')
+if ! command -v bat &> /dev/null; then
+    echo "Installing bat..."
+    if [ "$PKG_MANAGER" = "apt" ]; then
+        $INSTALL_CMD bat
+        # Ubuntu installs bat as batcat - create symlink
+        mkdir -p "$HOME/.local/bin"
+        if [ -f /usr/bin/batcat ]; then
+            ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
+        fi
+    else
+        $INSTALL_CMD bat
+    fi
+fi
+
+# Install fd-find (special case - Ubuntu uses fdfind)
 if ! command -v fd &> /dev/null && ! command -v fdfind &> /dev/null; then
     echo "Installing fd..."
     if [ "$PKG_MANAGER" = "apt" ]; then
         $INSTALL_CMD fd-find
         mkdir -p "$HOME/.local/bin"
-        ln -sf "$(which fdfind)" "$HOME/.local/bin/fd" 2>/dev/null || true
+        if [ -f /usr/bin/fdfind ]; then
+            ln -sf /usr/bin/fdfind "$HOME/.local/bin/fd"
+        fi
     else
         $INSTALL_CMD fd
     fi
@@ -229,34 +246,14 @@ for file in "$SCRIPT_DIR/.config/yazi"/*; do
     fi
 done
 
-# Set up yazi plugins AFTER configs are in place
-echo "Setting up yazi plugins..."
-
-# Note: Don't create plugins directory - let ya pkg handle it
-# Remove any existing empty plugins directory that might cause issues
-if [ -d "$HOME/.config/yazi/plugins" ]; then
-    if [ -z "$(ls -A $HOME/.config/yazi/plugins)" ]; then
-        rmdir "$HOME/.config/yazi/plugins"
-    fi
-fi
-
-# Install plugins using ya pkg (new command, replacing ya pack)
-if command -v ya &> /dev/null; then
-    echo "Installing yazi plugins using ya pkg..."
-    ya pkg add yazi-rs/plugins:zoxide 2>&1 | grep -v "^failed to copy" || true
-    ya pkg add yazi-rs/plugins:session 2>&1 | grep -v "^failed to copy" || true
-    ya pkg add yazi-rs/plugins:fr 2>&1 | grep -v "^failed to copy" || true
-    ya pkg add yazi-rs/plugins:compress 2>&1 | grep -v "^failed to copy" || true
-    ya pkg add ourongxing/smart-enter 2>&1 | grep -v "^failed to copy" || true
-    echo "Note: Check installed plugins with: ya pkg list"
-else
-    echo "Warning: 'ya' command not found. Install yazi plugins manually with:"
-    echo "  ya pkg add yazi-rs/plugins:zoxide"
-    echo "  ya pkg add yazi-rs/plugins:session"
-    echo "  ya pkg add yazi-rs/plugins:fr"
-    echo "  ya pkg add yazi-rs/plugins:compress"
-    echo "  ya pkg add ourongxing/smart-enter"
-fi
+# Set up yazi plugins - SKIP FOR NOW (ya pkg has bugs)
+echo "Skipping yazi plugin installation (ya pkg has deployment issues)"
+echo "Install manually after setup with:"
+echo "  ya pkg add yazi-rs/plugins:zoxide"
+echo "  ya pkg add yazi-rs/plugins:session"
+echo "  ya pkg add yazi-rs/plugins:fr"
+echo "  ya pkg add yazi-rs/plugins:compress"
+echo "  ya pkg add ourongxing/smart-enter"
 
 # Copy zellij configs
 echo "Installing zellij configs..."
