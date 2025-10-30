@@ -234,11 +234,31 @@ for plugin in "${!ZSH_PLUGINS[@]}"; do
     fi
 done
 
-# Set up yazi plugins
+# Copy configs FIRST (before installing plugins)
+echo "Copying config files..."
+
+# Backup existing configs
+if [ -f "$HOME/.zshrc" ]; then
+    echo "Backing up existing .zshrc to .zshrc.backup"
+    cp "$HOME/.zshrc" "$HOME/.zshrc.backup"
+fi
+
+# Copy zshrc
+echo "Installing .zshrc..."
+cp "$SCRIPT_DIR/linux.zshrc" "$HOME/.zshrc"
+
+# Copy yazi configs (but NOT the plugins directory)
+echo "Installing yazi configs..."
+mkdir -p "$HOME/.config/yazi"
+for file in "$SCRIPT_DIR/.config/yazi"/*; do
+    if [ -f "$file" ]; then
+        cp "$file" "$HOME/.config/yazi/"
+    fi
+done
+
+# Set up yazi plugins AFTER configs are in place
 echo "Setting up yazi plugins..."
 YAZI_PLUGINS_DIR="$HOME/.config/yazi/plugins"
-
-# Create plugins directory structure
 mkdir -p "$YAZI_PLUGINS_DIR"
 
 # Note: Most yazi plugins are in the yazi-rs/plugins repo
@@ -253,24 +273,6 @@ if command -v ya &> /dev/null; then
 else
     echo "Warning: 'ya' command not found. Install yazi plugins manually."
 fi
-
-# Copy configs
-echo "Copying config files..."
-
-# Backup existing configs
-if [ -f "$HOME/.zshrc" ]; then
-    echo "Backing up existing .zshrc to .zshrc.backup"
-    cp "$HOME/.zshrc" "$HOME/.zshrc.backup"
-fi
-
-# Copy zshrc
-echo "Installing .zshrc..."
-cp "$SCRIPT_DIR/linux.zshrc" "$HOME/.zshrc"
-
-# Copy yazi configs
-echo "Installing yazi configs..."
-mkdir -p "$HOME/.config/yazi"
-cp -r "$SCRIPT_DIR/.config/yazi/"* "$HOME/.config/yazi/"
 
 # Copy zellij configs
 echo "Installing zellij configs..."
