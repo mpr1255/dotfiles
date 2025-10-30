@@ -12,6 +12,8 @@ linemode = "file_info"
 [preview]
 wrap = "yes"
 tab_size = 2
+max_width = 600
+max_height = 900
 
 # [plugin]
 # prepend_previewers = [
@@ -44,6 +46,14 @@ prepend_previewers = [
   { name = "*.DOCX", run = "doc-text" },
   { name = "*.rtf", run = "doc-text" },
   { name = "*.RTF", run = "doc-text" },
+]
+
+previewers = [
+	{ name = "*/", run = "folder", sync = true },
+	{ mime = "text/*", run = "code" },
+	{ mime = "*/xml", run = "code" },
+	{ mime = "*/javascript", run = "code" },
+	{ mime = "*/x-wine-extension-ini", run = "code" },
 ]
 
 [opener]

@@ -241,6 +241,7 @@ echo "Installing additional cargo tools..."
 CARGO_TOOLS=(
     "ripgrep-all"  # rga
     "files-to-prompt"
+    "ouch"  # archive previews for yazi
 )
 
 for tool in "${CARGO_TOOLS[@]}"; do
@@ -312,6 +313,18 @@ if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting zsh as default shell..."
     chsh -s "$(which zsh)"
     echo "Note: You need to log out and back in for the shell change to take effect"
+fi
+
+# Add exec zsh to bashrc for immediate zsh startup (until logout/login)
+if [ -f "$HOME/.bashrc" ]; then
+    if ! grep -q "exec zsh" "$HOME/.bashrc"; then
+        echo "Adding 'exec zsh' to ~/.bashrc for immediate zsh startup..."
+        echo "" >> "$HOME/.bashrc"
+        echo "# Auto-start zsh (added by dotfiles setup.sh)" >> "$HOME/.bashrc"
+        echo "if [ -x /usr/bin/zsh ]; then" >> "$HOME/.bashrc"
+        echo "    exec zsh" >> "$HOME/.bashrc"
+        echo "fi" >> "$HOME/.bashrc"
+    fi
 fi
 
 # Create secrets file template
