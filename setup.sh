@@ -11,18 +11,26 @@ echo "======================================"
 echo "Setting up Linux dotfiles environment"
 echo "======================================"
 
-# Validate sudo access first
-echo "Validating sudo access..."
+# Set up passwordless sudo if not already configured
+echo "Checking sudo configuration..."
 if ! sudo -n true 2>/dev/null; then
-    echo "Error: This script requires passwordless sudo access."
-    echo "Please run these commands as root first:"
-    echo ""
-    echo "  usermod -aG sudo $USER"
-    echo "  echo '$USER ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-$USER"
-    echo "  chmod 440 /etc/sudoers.d/90-$USER"
-    echo ""
-    echo "Then log out and back in, and run this script again."
-    exit 1
+    echo "Passwordless sudo not configured. Setting it up now..."
+    echo "You may be prompted for your password once."
+
+    # This will prompt for password once, then set up NOPASSWD
+    echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/90-$USER > /dev/null
+    sudo chmod 440 /etc/sudoers.d/90-$USER
+
+    # Verify it worked
+    if ! sudo -n true 2>/dev/null; then
+        echo "Error: Failed to set up passwordless sudo."
+        echo "Please ensure you're in the sudo group:"
+        echo "  sudo usermod -aG sudo $USER"
+        echo "Then log out and back in."
+        exit 1
+    fi
+
+    echo "Passwordless sudo configured successfully."
 fi
 
 # Refresh sudo timestamp to avoid prompts during installation
