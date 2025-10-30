@@ -207,34 +207,11 @@ for tool in "${CARGO_TOOLS[@]}"; do
     fi
 done
 
-# Install pipx (Python package installer)
-if ! command -v pipx &> /dev/null; then
-    echo "Installing pipx..."
-    # Ubuntu 24.04+ uses pipx from apt to avoid externally-managed-environment errors
-    if [ "$PKG_MANAGER" = "apt" ]; then
-        $INSTALL_CMD pipx
-    else
-        $INSTALL_CMD python3-pip python3-venv
-        python3 -m pip install --user pipx 2>/dev/null || true
-    fi
-
-    # Ensure pipx path is set up
-    if command -v pipx &> /dev/null; then
-        pipx ensurepath 2>/dev/null || true
-    fi
-fi
-
-# Install sqlite-utils via pipx
-if ! command -v sqlite-utils &> /dev/null; then
-    echo "Installing sqlite-utils..."
-    if command -v pipx &> /dev/null; then
-        pipx install sqlite-utils
-    else
-        echo "Warning: pipx not available, skipping sqlite-utils"
-    fi
-else
-    echo "sqlite-utils already installed"
-fi
+# Note: We use uv for all Python package management
+# sqlite-utils and other Python tools can be installed with:
+#   uvx sqlite-utils [args]
+# or:
+#   uv tool install sqlite-utils
 
 # Set up zsh plugins
 echo "Setting up zsh plugins..."
