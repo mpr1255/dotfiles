@@ -231,20 +231,31 @@ done
 
 # Set up yazi plugins AFTER configs are in place
 echo "Setting up yazi plugins..."
-YAZI_PLUGINS_DIR="$HOME/.config/yazi/plugins"
-mkdir -p "$YAZI_PLUGINS_DIR"
 
-# Note: Most yazi plugins are in the yazi-rs/plugins repo
-# We'll install them using ya pkg (new command, replacing ya pack)
+# Note: Don't create plugins directory - let ya pkg handle it
+# Remove any existing empty plugins directory that might cause issues
+if [ -d "$HOME/.config/yazi/plugins" ]; then
+    if [ -z "$(ls -A $HOME/.config/yazi/plugins)" ]; then
+        rmdir "$HOME/.config/yazi/plugins"
+    fi
+fi
+
+# Install plugins using ya pkg (new command, replacing ya pack)
 if command -v ya &> /dev/null; then
     echo "Installing yazi plugins using ya pkg..."
-    ya pkg add yazi-rs/plugins:zoxide
-    ya pkg add yazi-rs/plugins:session
-    ya pkg add yazi-rs/plugins:fr
-    ya pkg add yazi-rs/plugins:compress
-    ya pkg add ourongxing/smart-enter
+    ya pkg add yazi-rs/plugins:zoxide 2>&1 | grep -v "^failed to copy" || true
+    ya pkg add yazi-rs/plugins:session 2>&1 | grep -v "^failed to copy" || true
+    ya pkg add yazi-rs/plugins:fr 2>&1 | grep -v "^failed to copy" || true
+    ya pkg add yazi-rs/plugins:compress 2>&1 | grep -v "^failed to copy" || true
+    ya pkg add ourongxing/smart-enter 2>&1 | grep -v "^failed to copy" || true
+    echo "Note: Check installed plugins with: ya pkg list"
 else
-    echo "Warning: 'ya' command not found. Install yazi plugins manually."
+    echo "Warning: 'ya' command not found. Install yazi plugins manually with:"
+    echo "  ya pkg add yazi-rs/plugins:zoxide"
+    echo "  ya pkg add yazi-rs/plugins:session"
+    echo "  ya pkg add yazi-rs/plugins:fr"
+    echo "  ya pkg add yazi-rs/plugins:compress"
+    echo "  ya pkg add ourongxing/smart-enter"
 fi
 
 # Copy zellij configs
