@@ -116,8 +116,8 @@ if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
-# fzf completion bindings
-bindkey '^I' fzf-completion
+# Note: fzf provides Ctrl+T (files), Ctrl+R (history by default, overridden by mcfly)
+# Tab completion works via standard zsh completion + fzf-tab plugin
 
 # --- FZF / Completion Styling (zstyle) ---
 zstyle ':completion:*:git-checkout:*' sort false
