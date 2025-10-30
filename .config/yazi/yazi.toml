@@ -80,9 +80,6 @@ w3m_open = [
 vd = [
 	{ run = 'vd "$@"', block = true},
 ]
-$EDITOR = [
-	{ run = '$EDITOR "$@"', block = true },
-]
 bulk_rename = [
 	{ run = '$EDITOR -w "$@"', block = true },
 ]
@@ -121,7 +118,7 @@ rules = [
 	{ name = "bulk-rename.txt", use = [ "bulk_rename" ] },
 	{ name = "*/", use = [ "edit", "open", "reveal" ] },
 	{ name = "*.csv", use = [ "vd", "open_csv_default" ] },
-	{ name = "*.html", use = ["w3m_open", "browser", "text", "$EDITOR" ] },
+	{ name = "*.html", use = ["w3m_open", "browser", "text", "edit" ] },
 	{ name = "*.mhtml", use = [ "mhtml_browser"] },
 	{ name = "*.mht", use = [ "mhtml_browser"] },
 	{ name = "*.pdf", use = [ "pdf_text", "open" ] },
@@ -130,17 +127,17 @@ rules = [
 	{ name = "*.DOC", use = [ "doc_text", "open" ] },
 	{ name = "*.docx", use = [ "docx_text", "open" ] },
 	{ name = "*.DOCX", use = [ "docx_text", "open" ] },
-	{ mime = "text/*",  use = [ "edit", "$EDITOR", "vd", "reveal", "browser"  ] },
-	# { name = "*.txt",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
-	# { name = "*.md",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
-	# { name = "*.yaml",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
-	# { name = "*.yml",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
-	# { name = "*.toml",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
+	{ mime = "text/*",  use = [ "edit", "vd", "reveal", "browser"  ] },
+	# { name = "*.txt",  use = [ "edit", "reveal", "browser"  ] },
+	# { name = "*.md",  use = [ "edit", "reveal", "browser"  ] },
+	# { name = "*.yaml",  use = [ "edit", "reveal", "browser"  ] },
+	# { name = "*.yml",  use = [ "edit", "reveal", "browser"  ] },
+	# { name = "*.toml",  use = [ "edit", "reveal", "browser"  ] },
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	{ mime = "video/*", use = [ "play", "reveal" ] },
 	{ mime = "audio/*", use = [ "play", "reveal" ] },
 	{ mime = "inode/x-empty", use = [ "edit", "reveal" ] },
-	{ mime = "application/json", use = [ "edit", "$EDITOR", "reveal" ] },
+	{ mime = "application/json", use = [ "edit", "reveal" ] },
 	{ mime = "*/javascript",     use = [ "edit", "reveal" ] },
 	{ mime = "application/zip",             use = [ "extract", "reveal" ] },
 	{ mime = "application/gzip",            use = [ "extract", "reveal" ] },
