@@ -11,6 +11,23 @@ echo "======================================"
 echo "Setting up Linux dotfiles environment"
 echo "======================================"
 
+# Validate sudo access first
+echo "Validating sudo access..."
+if ! sudo -n true 2>/dev/null; then
+    echo "Error: This script requires passwordless sudo access."
+    echo "Please run these commands as root first:"
+    echo ""
+    echo "  usermod -aG sudo $USER"
+    echo "  echo '$USER ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-$USER"
+    echo "  chmod 440 /etc/sudoers.d/90-$USER"
+    echo ""
+    echo "Then log out and back in, and run this script again."
+    exit 1
+fi
+
+# Refresh sudo timestamp to avoid prompts during installation
+sudo -v
+
 # Detect package manager
 if command -v apt-get &> /dev/null; then
     PKG_MANAGER="apt"
@@ -133,18 +150,18 @@ else
     echo "uv already installed"
 fi
 
-# Install starship prompt
+# Install starship prompt via cargo (avoids sudo prompts)
 if ! command -v starship &> /dev/null; then
     echo "Installing starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
+    cargo install starship --locked 2>/dev/null || echo "Warning: Could not install starship via cargo"
 else
     echo "starship already installed"
 fi
 
-# Install mcfly
+# Install mcfly via cargo (avoids sudo prompts)
 if ! command -v mcfly &> /dev/null; then
     echo "Installing mcfly..."
-    curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
+    cargo install mcfly --locked 2>/dev/null || echo "Warning: Could not install mcfly via cargo"
 else
     echo "mcfly already installed"
 fi
