@@ -237,24 +237,19 @@ done
 # Set up yazi plugins
 echo "Setting up yazi plugins..."
 YAZI_PLUGINS_DIR="$HOME/.config/yazi/plugins"
+
+# Create plugins directory structure
 mkdir -p "$YAZI_PLUGINS_DIR"
 
-declare -A YAZI_PLUGINS
-YAZI_PLUGINS["zoxide"]="https://github.com/yazi-rs/plugins/tree/main/zoxide.yazi"
-YAZI_PLUGINS["session"]="https://github.com/yazi-rs/plugins/tree/main/session.yazi"
-YAZI_PLUGINS["fr"]="https://github.com/yazi-rs/plugins/tree/main/fr.yazi"
-YAZI_PLUGINS["smart-enter"]="https://github.com/ourongxing/smart-enter.yazi.git"
-YAZI_PLUGINS["compress"]="https://github.com/yazi-rs/plugins/tree/main/compress.yazi"
-
 # Note: Most yazi plugins are in the yazi-rs/plugins repo
-# We'll install them using ya pack
+# We'll install them using ya pkg (new command, replacing ya pack)
 if command -v ya &> /dev/null; then
-    echo "Installing yazi plugins using ya pack..."
-    ya pack -a yazi-rs/plugins:zoxide
-    ya pack -a yazi-rs/plugins:session
-    ya pack -a yazi-rs/plugins:fr
-    ya pack -a yazi-rs/plugins:compress
-    ya pack -a ourongxing/smart-enter
+    echo "Installing yazi plugins using ya pkg..."
+    ya pkg -a yazi-rs/plugins:zoxide
+    ya pkg -a yazi-rs/plugins:session
+    ya pkg -a yazi-rs/plugins:fr
+    ya pkg -a yazi-rs/plugins:compress
+    ya pkg -a ourongxing/smart-enter
 else
     echo "Warning: 'ya' command not found. Install yazi plugins manually."
 fi
