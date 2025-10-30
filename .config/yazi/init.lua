@@ -44,6 +44,12 @@ function Linemode:file_info()
 	}
 end
 
+-- Note: Uncomment these after installing plugins:
+--   ya pkg add yazi-rs/plugins:zoxide
+--   ya pkg add yazi-rs/plugins:session
+--   ya pkg add yazi-rs/plugins:fr
+
+--[[
 require("zoxide"):setup({
 	update_db = true,
 })
@@ -52,8 +58,7 @@ require("session"):setup({
 	sync_yanked = true,
 })
 
--- Note: Uncomment after installing plugins with: ya pkg add yazi-rs/plugins:fr
--- require("fr"):setup({
+require("fr"):setup({
 	-- fzf options: Using $EDITOR instead of hardcoded sublime path
 	fzf = "--height 100% --preview-window top:60%:wrap --no-scrollbar --info-command='echo \"$FZF_INFO 💛\"' --color=bg+:#FFFF00,bg:#000000,spinner:#fb4934,hl:#FF0000,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#FF0000,prompt:#fb4934,hl+:#FF0000 --bind \"enter:execute('$EDITOR {1}:{2}')\"",
 
