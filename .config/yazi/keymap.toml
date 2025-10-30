@@ -94,8 +94,8 @@ desc = "Find the files"
 
 [[mgr.prepend_keymap]]
 on   = [ "u" ]
-run = """  shell --confirm '$EDITOR "$@"'  """
-desc = "Open file in $EDITORime text"
+run = """  shell --confirm 'nvim "$@"'  """
+desc = "Open file in nvimime text"
 
 [[mgr.prepend_keymap]]
 on = [ "<C-n>" ]

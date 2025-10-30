@@ -38,8 +38,8 @@ echo "Sanitizing configs for Linux..."
 sed -i.bak 's|/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl|\$EDITOR|g' "$CONFIG_DIR/yazi/init.lua"
 rm -f "$CONFIG_DIR/yazi/init.lua.bak"
 
-# Sanitize yazi keymap.toml - replace subl with $EDITOR
-sed -i.bak "s|subl|\$EDITOR|g" "$CONFIG_DIR/yazi/keymap.toml"
+# Sanitize yazi keymap.toml - replace subl with nvim (no GUI editor on Linux)
+sed -i.bak "s|subl|nvim|g" "$CONFIG_DIR/yazi/keymap.toml"
 rm -f "$CONFIG_DIR/yazi/keymap.toml.bak"
 
 # Sanitize yazi theme.toml - comment out catppuccin theme
@@ -54,9 +54,13 @@ sed -i.bak 's|open -a skim|xdg-open|g' "$CONFIG_DIR/yazi/yazi.toml"
 # Replace macOS 'open' commands with xdg-open
 sed -i.bak 's|{ run = '\''open "\$@"'\'', *desc = "Open", for = "macos" }|{ run = '\''xdg-open "\$@"'\'', desc = "Open", for = "linux" }|g' "$CONFIG_DIR/yazi/yazi.toml"
 sed -i.bak 's|{ run = '\''open -R "\$1"'\''|{ run = '\''xdg-open "$(dirname "\$1")"'\''|g' "$CONFIG_DIR/yazi/yazi.toml"
-# Replace subl with $EDITOR only in the subl opener's 'run' command
-# Keep the 'subl' opener name and references to it - it will just run $EDITOR on Linux
-sed -i.bak "s|run = 'subl|run = '\\\$EDITOR|g" "$CONFIG_DIR/yazi/yazi.toml"
+# Remove subl opener entirely and replace all subl references with edit
+# No Sublime Text on Linux - use nvim via the 'edit' opener
+sed -i.bak '/^subl = \[/,/^\]/d' "$CONFIG_DIR/yazi/yazi.toml"
+sed -i.bak 's/"subl"/"edit"/g' "$CONFIG_DIR/yazi/yazi.toml"
+sed -i.bak "s|run = 'subl|run = 'nvim|g" "$CONFIG_DIR/yazi/yazi.toml"
+# Remove duplicate "edit" entries from use arrays
+sed -i.bak 's/"edit", "edit"/"edit"/g' "$CONFIG_DIR/yazi/yazi.toml"
 rm -f "$CONFIG_DIR/yazi/yazi.toml.bak"
 
 echo "Done! Configs have been copied and sanitized for Linux."

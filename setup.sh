@@ -102,6 +102,30 @@ for tool in ripgrep eza zoxide neovim sqlite3 mpv w3m; do
     fi
 done
 
+# Install Node.js and npm
+if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
+    echo "Installing Node.js and npm..."
+    if [ "$PKG_MANAGER" = "apt" ]; then
+        # Install Node.js LTS via NodeSource
+        curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+        $INSTALL_CMD nodejs
+    else
+        $INSTALL_CMD nodejs npm
+    fi
+else
+    echo "Node.js and npm already installed"
+fi
+
+# Install bun (modern JavaScript runtime and package manager)
+if ! command -v bun &> /dev/null; then
+    echo "Installing bun..."
+    curl -fsSL https://bun.sh/install | bash
+    # Add bun to PATH for current session
+    export PATH="$HOME/.bun/bin:$PATH"
+else
+    echo "bun already installed"
+fi
+
 # Install document processing tools for yazi
 echo "Installing document processing tools..."
 for tool in antiword pandoc poppler-utils; do
