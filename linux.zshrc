@@ -102,12 +102,24 @@ if command -v fzf &> /dev/null; then
   if fzf --zsh &>/dev/null 2>&1; then
     source <(fzf --zsh)
   else
-    # Older fzf versions - load from standard locations
-    if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
-      source /usr/share/doc/fzf/examples/key-bindings.zsh
-    fi
-    if [ -f /usr/share/doc/fzf/examples/completion.zsh ]; then
-      source /usr/share/doc/fzf/examples/completion.zsh
+    # Older fzf versions - try multiple common locations
+    FZF_LOADED=false
+
+    # Ubuntu/Debian locations
+    for base in /usr/share/doc/fzf /usr/share/fzf; do
+      if [ -f "$base/examples/key-bindings.zsh" ]; then
+        source "$base/examples/key-bindings.zsh"
+        FZF_LOADED=true
+      fi
+      if [ -f "$base/examples/completion.zsh" ]; then
+        source "$base/examples/completion.zsh"
+        FZF_LOADED=true
+      fi
+    done
+
+    # If still not loaded, try .fzf.zsh (from manual install)
+    if [ "$FZF_LOADED" = false ] && [ -f ~/.fzf.zsh ]; then
+      source ~/.fzf.zsh
     fi
   fi
 fi
