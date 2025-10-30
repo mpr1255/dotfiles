@@ -245,11 +245,11 @@ mkdir -p "$YAZI_PLUGINS_DIR"
 # We'll install them using ya pkg (new command, replacing ya pack)
 if command -v ya &> /dev/null; then
     echo "Installing yazi plugins using ya pkg..."
-    ya pkg -a yazi-rs/plugins:zoxide
-    ya pkg -a yazi-rs/plugins:session
-    ya pkg -a yazi-rs/plugins:fr
-    ya pkg -a yazi-rs/plugins:compress
-    ya pkg -a ourongxing/smart-enter
+    ya pkg add yazi-rs/plugins:zoxide
+    ya pkg add yazi-rs/plugins:session
+    ya pkg add yazi-rs/plugins:fr
+    ya pkg add yazi-rs/plugins:compress
+    ya pkg add ourongxing/smart-enter
 else
     echo "Warning: 'ya' command not found. Install yazi plugins manually."
 fi
