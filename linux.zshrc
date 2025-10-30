@@ -98,7 +98,18 @@ fi
 
 # fzf (Keybindings and fuzzy completion) - must come BEFORE mcfly
 if command -v fzf &> /dev/null; then
-  source <(fzf --zsh)
+  # Try new style first (fzf 0.48.0+), fall back to older setup
+  if fzf --zsh &>/dev/null 2>&1; then
+    source <(fzf --zsh)
+  else
+    # Older fzf versions - load from standard locations
+    if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+      source /usr/share/doc/fzf/examples/key-bindings.zsh
+    fi
+    if [ -f /usr/share/doc/fzf/examples/completion.zsh ]; then
+      source /usr/share/doc/fzf/examples/completion.zsh
+    fi
+  fi
 fi
 
 # mcfly - must come AFTER fzf to properly override Ctrl+R
