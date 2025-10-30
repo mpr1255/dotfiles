@@ -1,5 +1,6 @@
 [mgr]
 ratio          = [ 1, 3, 4 ]
+#ratio          = [ 1, 4, 3 ]
 sort_by        = "mtime"
 sort_sensitive = false
 sort_dir_first = false
@@ -11,6 +12,16 @@ linemode = "file_info"
 [preview]
 wrap = "yes"
 tab_size = 2
+
+# [plugin]
+# prepend_previewers = [
+#     { name = "*.csv", run = "rich-preview"}, # for csv files
+#     { name = "*.md", run = "rich-preview" }, # for markdown (.md) files
+#     { name = "*.rst", run = "rich-preview"}, # for restructured text (.rst) files
+#     { name = "*.ipynb", run = "rich-preview"}, # for jupyter notebooks (.ipynb)
+#     { name = "*.json", run = "rich-preview"}, # for json (.json) files
+#    { name = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
+# ]
 
 [plugin]
 prepend_previewers = [
@@ -43,11 +54,11 @@ text = [
 	{ run = 'nvim "$@"', block = true },
 ]
 browser = [
-	{ run = 'xdg-open "$@"', block = true, for = "linux" },
+	{ run = 'xdg-open "$@"', block = true},
 ]
 
-mhtml_browser = [
-  { run = 'mhtml-to-html "$1" | w3m -T text/html | nvim', block = true },
+  mhtml_browser = [
+    { run = 'mhtml-to-html "$1" | w3m -T text/html | nvim', block = true },
 ]
 
 pdf_text = [
@@ -62,28 +73,38 @@ docx_text = [
 	{ run = 'pandoc "$1" -t plain | nvim', block = true },
 ]
 
+
 w3m_open = [
 	{ run = 'w3m "$@" | nvim', block = true},
 ]
 vd = [
 	{ run = 'vd "$@"', block = true},
 ]
-edit = [
+$EDITOR = [
 	{ run = '$EDITOR "$@"', block = true },
 ]
 bulk_rename = [
 	{ run = '$EDITOR -w "$@"', block = true },
 ]
+edit = [
+	{ run = '$EDITOR "$@"', block = true,  for = "unix" },
+	{ run = 'code "%*"',    orphan = true, for = "windows" },
+]
 open = [
+	{ run = 'xdg-open "$@"',                desc = "Open", for = "linux" },
 	{ run = 'xdg-open "$@"', desc = "Open", for = "linux" },
+	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" }
 ]
 
 open_csv_default = [
-	{ run = 'xdg-open "$@"', desc = "Open (Default App)", for = "linux" },
+	{ run = 'xdg-open "$@"',                desc = "Open (Default App)", for = "linux" },
+	{ run = 'open "$@"',                    desc = "Open (Default App)", for = "macos" },
+	{ run = 'start "" "%1"', orphan = true, desc = "Open (Default App)", for = "windows" }
 ]
 
 reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
+	{ run = 'xdg-open "$(dirname "$1")"',                          desc = "Reveal", for = "macos" },
+	{ run = 'explorer /select, "%1"', orphan = true, desc = "Reveal", for = "windows" },
 	{ run = '''exiftool "$1"; echo "Press enter to exit"; read''', block = true, desc = "Show EXIF", for = "unix" },
 ]
 extract = [
@@ -91,6 +112,7 @@ extract = [
 ]
 play = [
 	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+	{ run = 'mpv "%1"', orphan = true, for = "windows" },
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, desc = "Show media info", for = "unix" },
 ]
 
@@ -99,7 +121,7 @@ rules = [
 	{ name = "bulk-rename.txt", use = [ "bulk_rename" ] },
 	{ name = "*/", use = [ "edit", "open", "reveal" ] },
 	{ name = "*.csv", use = [ "vd", "open_csv_default" ] },
-	{ name = "*.html", use = ["w3m_open", "browser", "text" ] },
+	{ name = "*.html", use = ["w3m_open", "browser", "text", "$EDITOR" ] },
 	{ name = "*.mhtml", use = [ "mhtml_browser"] },
 	{ name = "*.mht", use = [ "mhtml_browser"] },
 	{ name = "*.pdf", use = [ "pdf_text", "open" ] },
@@ -108,12 +130,17 @@ rules = [
 	{ name = "*.DOC", use = [ "doc_text", "open" ] },
 	{ name = "*.docx", use = [ "docx_text", "open" ] },
 	{ name = "*.DOCX", use = [ "docx_text", "open" ] },
-	{ mime = "text/*",  use = [ "edit", "vd", "reveal", "browser"  ] },
+	{ mime = "text/*",  use = [ "edit", "$EDITOR", "vd", "reveal", "browser"  ] },
+	# { name = "*.txt",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
+	# { name = "*.md",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
+	# { name = "*.yaml",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
+	# { name = "*.yml",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
+	# { name = "*.toml",  use = [ "edit", "$EDITOR", "reveal", "browser"  ] },
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	{ mime = "video/*", use = [ "play", "reveal" ] },
 	{ mime = "audio/*", use = [ "play", "reveal" ] },
 	{ mime = "inode/x-empty", use = [ "edit", "reveal" ] },
-	{ mime = "application/json", use = [ "edit", "reveal" ] },
+	{ mime = "application/json", use = [ "edit", "$EDITOR", "reveal" ] },
 	{ mime = "*/javascript",     use = [ "edit", "reveal" ] },
 	{ mime = "application/zip",             use = [ "extract", "reveal" ] },
 	{ mime = "application/gzip",            use = [ "extract", "reveal" ] },
@@ -135,3 +162,5 @@ bizarre_retry    = 5
 image_alloc      = 536870912  # 512MB
 image_bound      = [ 0, 0 ]
 suppress_preload = false
+
+

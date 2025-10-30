@@ -252,23 +252,14 @@ fi
 echo "Installing .zshrc..."
 cp "$SCRIPT_DIR/linux.zshrc" "$HOME/.zshrc"
 
-# Copy yazi configs (but NOT the plugins directory)
-echo "Installing yazi configs..."
+# Copy yazi configs including plugins directory
+echo "Installing yazi configs and plugins..."
 mkdir -p "$HOME/.config/yazi"
-for file in "$SCRIPT_DIR/.config/yazi"/*; do
-    if [ -f "$file" ]; then
-        cp "$file" "$HOME/.config/yazi/"
-    fi
-done
+cp -r "$SCRIPT_DIR/.config/yazi/"* "$HOME/.config/yazi/"
 
-# Set up yazi plugins - SKIP FOR NOW (ya pkg has bugs)
-echo "Skipping yazi plugin installation (ya pkg has deployment issues)"
-echo "Install manually after setup with:"
-echo "  ya pkg add yazi-rs/plugins:zoxide"
-echo "  ya pkg add yazi-rs/plugins:session"
-echo "  ya pkg add yazi-rs/plugins:fr"
-echo "  ya pkg add yazi-rs/plugins:compress"
-echo "  ya pkg add ourongxing/smart-enter"
+# Note: yazi plugins are ready to use
+# - zoxide and session are built-in preset plugins
+# - fr, compress, and smart-enter are included in .config/yazi/plugins/
 
 # Copy zellij configs
 echo "Installing zellij configs..."
@@ -313,12 +304,8 @@ echo ""
 echo "Keybindings:"
 echo "  - Ctrl+T: fzf file search"
 echo "  - Ctrl+R: mcfly history search"
-echo "  - n: yazi file manager"
+echo "  - n: yazi file manager (with zoxide, session, fr, compress plugins)"
 echo "  - zl: zellij terminal multiplexer"
-echo ""
-echo "Optional: Install yazi plugins manually with:"
-echo "  ya pkg add yazi-rs/plugins:zoxide"
-echo "  ya pkg add yazi-rs/plugins:session"
 echo ""
 echo "======================================"
 echo "Starting zsh now..."

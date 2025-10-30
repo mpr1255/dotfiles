@@ -1,5 +1,2 @@
-# Optional: Install catppuccin theme with:
-#   ya pkg add yazi-rs/flavors:catppuccin-mocha
-# Then uncomment:
-# [flavor]
-# dark = "catppuccin-mocha"
+[flavor]
+dark = "catppuccin-mocha"
