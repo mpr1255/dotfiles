@@ -11,15 +11,13 @@ CONFIG_DIR="$SCRIPT_DIR/.config"
 echo "Refreshing dotfiles from Mac..."
 
 # Create directory structure
-mkdir -p "$CONFIG_DIR/yazi/plugins"
 mkdir -p "$CONFIG_DIR/zellij/layouts"
 
-# Copy Yazi configs
-echo "Copying Yazi configs..."
-cp "$HOME/.config/yazi/init.lua" "$CONFIG_DIR/yazi/init.lua"
-cp "$HOME/.config/yazi/keymap.toml" "$CONFIG_DIR/yazi/keymap.toml"
-cp "$HOME/.config/yazi/yazi.toml" "$CONFIG_DIR/yazi/yazi.toml"
-cp "$HOME/.config/yazi/theme.toml" "$CONFIG_DIR/yazi/theme.toml"
+# Copy entire Yazi directory (including plugins and flavors)
+echo "Copying Yazi configs (entire directory)..."
+mkdir -p "$CONFIG_DIR/yazi"
+rsync -av --delete --exclude='.DS_Store' --exclude='.unison' --exclude='*-[0-9]*' \
+    "$HOME/.config/yazi/" "$CONFIG_DIR/yazi/"
 
 # Copy Zellij configs
 echo "Copying Zellij configs..."
@@ -42,10 +40,7 @@ rm -f "$CONFIG_DIR/yazi/init.lua.bak"
 sed -i.bak "s|subl|nvim|g" "$CONFIG_DIR/yazi/keymap.toml"
 rm -f "$CONFIG_DIR/yazi/keymap.toml.bak"
 
-# Sanitize yazi theme.toml - comment out catppuccin theme
-sed -i.bak 's|^\[flavor\]|# Optional: Install catppuccin theme with:\n#   ya pkg add yazi-rs/flavors:catppuccin-mocha\n# Then uncomment:\n# [flavor]|' "$CONFIG_DIR/yazi/theme.toml"
-sed -i.bak 's|^dark = |# dark = |' "$CONFIG_DIR/yazi/theme.toml"
-rm -f "$CONFIG_DIR/yazi/theme.toml.bak"
+# Note: theme.toml is left unchanged - flavors directory is included in the repo
 
 # Sanitize yazi yazi.toml - replace Mac-specific commands
 # Replace 'open -a "Brave Browser"' with xdg-open
