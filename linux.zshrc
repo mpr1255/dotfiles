@@ -98,29 +98,18 @@ fi
 
 # fzf (Keybindings and fuzzy completion) - must come BEFORE mcfly
 if command -v fzf &> /dev/null; then
-  # Try new style first (fzf 0.48.0+), fall back to older setup
-  if fzf --zsh &>/dev/null 2>&1; then
+  # Load fzf from manual install (preferred - has latest features)
+  if [ -f ~/.fzf.zsh ]; then
+    source ~/.fzf.zsh
+  # Try new style (fzf 0.48.0+)
+  elif fzf --zsh &>/dev/null 2>&1; then
     source <(fzf --zsh)
+  # Fall back to package manager locations
   else
-    # Older fzf versions - try multiple common locations
-    FZF_LOADED=false
-
-    # Ubuntu/Debian locations
     for base in /usr/share/doc/fzf /usr/share/fzf; do
-      if [ -f "$base/examples/key-bindings.zsh" ]; then
-        source "$base/examples/key-bindings.zsh"
-        FZF_LOADED=true
-      fi
-      if [ -f "$base/examples/completion.zsh" ]; then
-        source "$base/examples/completion.zsh"
-        FZF_LOADED=true
-      fi
+      [ -f "$base/examples/key-bindings.zsh" ] && source "$base/examples/key-bindings.zsh"
+      [ -f "$base/examples/completion.zsh" ] && source "$base/examples/completion.zsh"
     done
-
-    # If still not loaded, try .fzf.zsh (from manual install)
-    if [ "$FZF_LOADED" = false ] && [ -f ~/.fzf.zsh ]; then
-      source ~/.fzf.zsh
-    fi
   fi
 fi
 

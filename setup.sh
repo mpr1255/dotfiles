@@ -95,12 +95,27 @@ if ! command -v gcc &> /dev/null; then
 fi
 
 # Install modern CLI tools only if needed
-for tool in ripgrep eza zoxide fzf neovim sqlite3 mpv w3m; do
+for tool in ripgrep eza zoxide neovim sqlite3 mpv w3m; do
     if ! command -v $tool &> /dev/null && ! command -v nvim &> /dev/null; then
         echo "Installing $tool..."
         $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool"
     fi
 done
+
+# Install fzf properly with setup
+if ! command -v fzf &> /dev/null; then
+    echo "Installing fzf..."
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish
+else
+    # If fzf exists but not properly set up, run install
+    if [ ! -f ~/.fzf.zsh ]; then
+        echo "Setting up fzf keybindings..."
+        if [ -d ~/.fzf ]; then
+            ~/.fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish
+        fi
+    fi
+fi
 
 # Install bat (Ubuntu installs as 'batcat')
 if ! command -v bat &> /dev/null; then
