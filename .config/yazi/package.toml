@@ -19,6 +19,10 @@ rev = "9a09505"
 hash = "7918aab6a71caf31b58411f789195677"
 
 [[plugin.deps]]
+use = "h-hg/yazi-plugins:smart-open"
+rev = "main"
+
+[[plugin.deps]]
 use = "MasouShizuka/projects"
 rev = "4f11ecc"
 hash = "17fa17295d27864f62875f06a77f72e7"
@@ -37,6 +41,26 @@ hash = "b0edc5e9b7f44b2d3303e74f785d0bc9"
 use = "KKV9/compress"
 rev = "9fc8fe0"
 hash = "2ad086899bf368fba211a33d8f68c39d"
+
+[[plugin.deps]]
+use = "ndtoan96/ouch"
+rev = "694d149"
+
+[[plugin.deps]]
+use = "sachinsenal0x64/pdf-preview"
+rev = "9e39c64"
+
+[[plugin.deps]]
+use = "Reledia/glow"
+rev = "672e6e5"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:zoxide"
+rev = "main"
+
+[[plugin.deps]]
+use = "Sonico98/fzf"
+rev = "main"
 
 [[flavor.deps]]
 use = "kmlupreti/ayu-dark"
