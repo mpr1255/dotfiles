@@ -183,12 +183,28 @@ else
     echo "mcfly already installed"
 fi
 
-# Install yazi
+# Install yazi from official releases (not cargo - cargo builds have issues)
 if ! command -v yazi &> /dev/null; then
-    echo "Installing yazi..."
-    cargo install --locked yazi-fm yazi-cli
+    echo "Installing yazi from GitHub releases..."
+    YAZI_TEMP="/tmp/yazi-install"
+    mkdir -p "$YAZI_TEMP"
+    cd "$YAZI_TEMP"
+    curl -fsSL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip -o yazi.zip
+    unzip -o yazi.zip
+    sudo cp yazi-x86_64-unknown-linux-gnu/yazi yazi-x86_64-unknown-linux-gnu/ya /usr/local/bin/
+    cd -
+    rm -rf "$YAZI_TEMP"
+    echo "yazi installed from official releases"
 else
     echo "yazi already installed"
+fi
+
+# Install file command (required by yazi for mime detection)
+if ! command -v file &> /dev/null; then
+    echo "Installing file command..."
+    $INSTALL_CMD file 2>/dev/null || echo "Warning: Could not install file"
+else
+    echo "file command already installed"
 fi
 
 # Install zellij
