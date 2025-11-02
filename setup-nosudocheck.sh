@@ -57,13 +57,29 @@ if ! command -v gcc &> /dev/null; then
     fi
 fi
 
-# Install modern CLI tools only if needed
-for tool in ripgrep eza zoxide neovim sqlite3 mpv w3m; do
-    if ! command -v $tool &> /dev/null && ! command -v nvim &> /dev/null; then
+# Install modern CLI tools only if needed (excluding neovim - installed separately)
+for tool in ripgrep eza zoxide sqlite3 mpv w3m; do
+    if ! command -v $tool &> /dev/null; then
         echo "Installing $tool..."
         $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool"
     fi
 done
+
+# Install neovim from official releases (not apt - apt version is too old)
+if ! command -v nvim &> /dev/null; then
+    echo "Installing neovim from GitHub releases..."
+    NVIM_TEMP="/tmp/nvim-install"
+    mkdir -p "$NVIM_TEMP"
+    cd "$NVIM_TEMP"
+    curl -fsSLO https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz
+    tar xzf nvim-linux-x86_64.tar.gz
+    sudo cp -r nvim-linux-x86_64/* /usr/local/
+    cd -
+    rm -rf "$NVIM_TEMP"
+    echo "neovim v0.11.4 installed from official releases"
+else
+    echo "neovim already installed"
+fi
 
 # Install Node.js and npm
 if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
@@ -286,6 +302,11 @@ cp -r "$SCRIPT_DIR/.config/yazi/"* "$HOME/.config/yazi/"
 echo "Installing zellij configs..."
 mkdir -p "$HOME/.config/zellij/layouts"
 cp -r "$SCRIPT_DIR/.config/zellij/"* "$HOME/.config/zellij/"
+
+# Copy neovim configs (LazyVim with smooth scrolling disabled)
+echo "Installing neovim configs..."
+mkdir -p "$HOME/.config/nvim"
+cp -r "$SCRIPT_DIR/.config/nvim/"* "$HOME/.config/nvim/"
 
 # Set zsh as default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
