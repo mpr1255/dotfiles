@@ -44,13 +44,21 @@ exec $SHELL
 
 If you already have a non-root user account with sudo access:
 
+**One-liner (download and run directly):**
 ```bash
-# Clone and run setup
+curl -fsSL https://raw.githubusercontent.com/mpr1255/dotfiles/master/setup.sh | bash
+```
+
+**Or clone first (recommended - keeps dotfiles repo):**
+```bash
 git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-chmod +x *.sh
-./setup.sh
-exec $SHELL
+bash setup.sh
+```
+
+**Then start zsh:**
+```bash
+exec zsh
 ```
 
 ### Option 3: Manual Hetzner Setup (step-by-step)
