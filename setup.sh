@@ -204,18 +204,18 @@ else
     echo "uv already installed"
 fi
 
-# Install starship prompt via cargo (avoids sudo prompts)
+# Install starship prompt (use official installer with prebuilt binaries)
 if ! command -v starship &> /dev/null; then
     echo "Installing starship..."
-    cargo install starship --locked 2>/dev/null || echo "Warning: Could not install starship via cargo"
+    curl -fsSL https://starship.rs/install.sh | bash -s -- --yes
 else
     echo "starship already installed"
 fi
 
-# Install mcfly via cargo (avoids sudo prompts)
+# Install mcfly (use official installer with prebuilt binaries)
 if ! command -v mcfly &> /dev/null; then
     echo "Installing mcfly..."
-    cargo install mcfly --locked 2>/dev/null || echo "Warning: Could not install mcfly via cargo"
+    curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
 else
     echo "mcfly already installed"
 fi
