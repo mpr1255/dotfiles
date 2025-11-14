@@ -95,7 +95,7 @@ if ! command -v gcc &> /dev/null; then
 fi
 
 # Install modern CLI tools only if needed
-for tool in ripgrep eza zoxide neovim sqlite3 mpv w3m; do
+for tool in ripgrep eza zoxide neovim sqlite3 mpv w3m rclone; do
     if ! command -v $tool &> /dev/null && ! command -v nvim &> /dev/null; then
         echo "Installing $tool..."
         $INSTALL_CMD $tool 2>/dev/null || echo "Warning: Could not install $tool"
