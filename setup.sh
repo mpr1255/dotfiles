@@ -331,8 +331,22 @@ cp -r "$SCRIPT_DIR/.config/zellij/"* "$HOME/.config/zellij/"
 # Set zsh as default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting zsh as default shell..."
-    chsh -s "$(which zsh)"
-    echo "Note: You need to log out and back in for the shell change to take effect"
+    sudo chsh -s "$(which zsh)" $USER
+fi
+
+# Add exec zsh to bashrc for immediate zsh on SSH login
+if [ -f "$HOME/.bashrc" ]; then
+    if ! grep -q "exec zsh" "$HOME/.bashrc"; then
+        echo "Adding auto-start zsh to ~/.bashrc..."
+        cat >> "$HOME/.bashrc" << 'EOF'
+
+# Auto-start zsh (added by dotfiles setup.sh)
+if [ -t 1 ] && [ -x /usr/bin/zsh ] && [ "$BASH" ]; then
+    export SHELL=/usr/bin/zsh
+    exec /usr/bin/zsh
+fi
+EOF
+    fi
 fi
 
 # Create secrets file template

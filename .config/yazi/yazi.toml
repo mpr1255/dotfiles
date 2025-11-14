@@ -46,6 +46,15 @@ prepend_previewers = [
   { name = "*.RTF", run = "doc-text" },
 ]
 
+# Default previewers for common file types
+previewers = [
+	{ name = "*/", run = "folder", sync = true },
+	{ mime = "text/*", run = "code" },
+	{ mime = "*/xml", run = "code" },
+	{ mime = "*/javascript", run = "code" },
+	{ mime = "*/x-wine-extension-ini", run = "code" },
+]
+
 [opener]
 archive = [
 	{ run = 'unar "$1"', desc = "Extract here" },
