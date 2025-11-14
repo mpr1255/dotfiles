@@ -200,6 +200,14 @@ else
     echo "uv already installed"
 fi
 
+# Install devbox (portable development environments)
+if ! command -v devbox &> /dev/null; then
+    echo "Installing devbox..."
+    curl -fsSL https://get.jetify.com/devbox | bash
+else
+    echo "devbox already installed"
+fi
+
 # Install starship prompt (use official installer with prebuilt binaries)
 if ! command -v starship &> /dev/null; then
     echo "Installing starship..."
