@@ -220,26 +220,50 @@ else
     echo "mcfly already installed"
 fi
 
-# Install yazi
+# Install yazi (download prebuilt binary from GitHub releases)
 if ! command -v yazi &> /dev/null; then
     echo "Installing yazi..."
-    cargo install --locked yazi-fm yazi-cli
+    wget -qO /tmp/yazi.zip https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-musl.zip
+    unzip -q /tmp/yazi.zip -d /tmp/yazi
+    sudo mv /tmp/yazi/yazi-x86_64-unknown-linux-musl/yazi /usr/local/bin/
+    sudo mv /tmp/yazi/yazi-x86_64-unknown-linux-musl/ya /usr/local/bin/
+    rm -rf /tmp/yazi.zip /tmp/yazi
 else
     echo "yazi already installed"
 fi
 
-# Install zellij
+# Install zellij via apt
 if ! command -v zellij &> /dev/null; then
     echo "Installing zellij..."
-    cargo install --locked zellij
+    if [ "$PKG_MANAGER" = "apt" ]; then
+        $INSTALL_CMD zellij
+    else
+        # For non-apt systems, download from GitHub releases
+        wget -qO /tmp/zellij.tar.gz https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz
+        tar -xzf /tmp/zellij.tar.gz -C /tmp
+        sudo mv /tmp/zellij /usr/local/bin/
+        rm -f /tmp/zellij.tar.gz
+    fi
 else
     echo "zellij already installed"
 fi
 
-# Install additional tools via cargo
+# Install ripgrep-all (rga) from GitHub releases
+if ! command -v rga &> /dev/null; then
+    echo "Installing ripgrep-all (rga)..."
+    RGA_VERSION=$(curl -s https://api.github.com/repos/phiresky/ripgrep-all/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    wget -qO /tmp/rga.tar.gz "https://github.com/phiresky/ripgrep-all/releases/latest/download/ripgrep_all-v${RGA_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+    tar -xzf /tmp/rga.tar.gz -C /tmp
+    sudo mv /tmp/ripgrep_all-v${RGA_VERSION}-x86_64-unknown-linux-musl/rga /usr/local/bin/
+    sudo mv /tmp/ripgrep_all-v${RGA_VERSION}-x86_64-unknown-linux-musl/rga-preproc /usr/local/bin/
+    rm -rf /tmp/rga.tar.gz /tmp/ripgrep_all-*
+else
+    echo "ripgrep-all (rga) already installed"
+fi
+
+# Install additional tools via cargo (small utilities only)
 echo "Installing additional cargo tools..."
 CARGO_TOOLS=(
-    "ripgrep-all"  # rga
     "files-to-prompt"
     "ouch"  # archive previews for yazi
 )
