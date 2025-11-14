@@ -54,7 +54,7 @@ bindkey '^[^[[B' autosuggest-fetch
 bindkey '^X^E' edit-command-line
 
 # --- Environment Variables ---
-export PATH="$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
+export PATH="$HOME/.fzf/bin:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
 
 # Editors & Pagers
 export VISUAL='nvim'

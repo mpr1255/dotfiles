@@ -1,0 +1,77 @@
+# Brewfile
+
+# Taps (if needed, unlikely for these)
+# tap "some/tap"
+
+# Core CLI Utilities
+brew "zsh"
+brew "coreutils" # Provides GNU utils like gls, gcat if needed
+brew "gnupg"     # For GPG
+brew "git"
+brew "less"      # Often system is fine, but brew version can be newer
+brew "sqlite"    # Database
+brew "postgresql@17" # Specific PostgreSQL version
+brew "openssl"   # Often a dependency
+brew "unison"   # Often a dependency
+brew "rsync"   # Often a dependency
+
+# Shell Enhancement Tools
+brew "fzf"             # Fuzzy finder - run $(brew --prefix)/opt/fzf/install after
+brew "zoxide"          # Smarter cd
+brew "mcfly"           # Smarter shell history
+brew "starship"        # Prompt
+brew "bat"             # Cat clone with syntax highlighting (for MANPAGER, cat alias)
+brew "eza"             # ls replacement (for ls, ll, tree aliases)
+brew "tree"             # ls replacement (for ls, ll, tree aliases)
+brew "fd"              # Find replacement (for FZF_DEFAULT_COMMAND)
+brew "ripgrep"         # Grep replacement (for rg alias)
+brew "ripgrep-all"     # rga (for rga-fzf function)
+brew "sd"              # Sed alternative (useful utility)
+brew "jq"              # JSON processor (useful utility)
+brew "yq"              # YAML processor (useful utility)
+brew "neovim"              # 
+brew "lazygit"              # 
+brew "7zip"              # 
+brew "ncdu"              # 
+brew "bmon"              # 
+brew "xclip"              # 
+brew "flock"              # 
+brew "moreutils"              # 
+
+# Programming Languages & Tools
+brew "node"            # JavaScript runtime (often needed)
+brew "go"            # Install Go if needed (PATH is set in zshrc)
+brew "rustup-init"   # Use rustup for Rust/Cargo install (PATH set in zshrc)
+brew "python"          # Install Python 3
+brew "pipx"            # Install python CLI apps in isolated envs
+brew "uv"              # Python packaging (used in pip alias)
+brew "gtk4"              # Python packaging (used in pip alias)
+brew "r"             # Install R (for knit function, radian alias)
+brew "gh"
+
+# Specific Tools Mentioned
+brew "yazi"            # Terminal file manager (for ya function/alias)
+brew "typst"           # Markup-based typesetting (for QUARTO_TYPST)
+brew "sqlite-utils"    # Utilities for SQLite (for squ alias)
+brew "transmission-cli" # For transmission-remote alias
+brew "s5cmd"           # S3 interaction tool (for s5cmd-b2 alias)
+# brew "spotify-tui"   # Or other spotify CLI if 'spotify' aliases need it
+brew "zellij"          # Terminal multiplexer (for zl alias)
+brew "imagemagick"     # Often needed for image manipulation (might pull in jbigkit!)
+brew "netpbm"          # Image manipulation toolkit (might pull in jbigkit!)
+brew "miller"          # csv manipulation stuff
+brew "restic"          # csv manipulation stuff
+brew "autorestic"          # csv manipulation stuff
+brew "ffmpeg"          # csv manipulation stuff
+brew "gh"          # csv manipulation stuff
+
+# Casks (GUI Applications - some might already be installed)
+cask "google-chrome"
+cask "font-hack-nerd-font" 
+cask "sublime-text"
+cask "skim"            # PDF reader
+
+# Fonts (Optional - if you use specific fonts for terminal/prompt)
+# tap "homebrew/cask-fonts"
+# brew "font-hack-nerd-font"
+# brew "font-fira-code-nerd-font"

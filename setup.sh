@@ -143,19 +143,15 @@ if command -v uv &> /dev/null; then
     uv tool install visidata 2>/dev/null || echo "Warning: Could not install visidata"
 fi
 
-# Install fzf properly with setup
-if ! command -v fzf &> /dev/null; then
-    echo "Installing fzf..."
+# Install fzf properly with setup (idempotent)
+if ! command -v fzf &> /dev/null || [ ! -f ~/.fzf.zsh ]; then
+    echo "Installing/updating fzf..."
+    # Remove existing broken installation if present
+    rm -rf ~/.fzf
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish
 else
-    # If fzf exists but not properly set up, run install
-    if [ ! -f ~/.fzf.zsh ]; then
-        echo "Setting up fzf keybindings..."
-        if [ -d ~/.fzf ]; then
-            ~/.fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish
-        fi
-    fi
+    echo "fzf already installed"
 fi
 
 # Install bat (Ubuntu installs as 'batcat')
@@ -339,18 +335,6 @@ if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Note: You need to log out and back in for the shell change to take effect"
 fi
 
-# Add exec zsh to bashrc for immediate zsh startup (until logout/login)
-if [ -f "$HOME/.bashrc" ]; then
-    if ! grep -q "exec zsh" "$HOME/.bashrc"; then
-        echo "Adding 'exec zsh' to ~/.bashrc for immediate zsh startup..."
-        echo "" >> "$HOME/.bashrc"
-        echo "# Auto-start zsh (added by dotfiles setup.sh)" >> "$HOME/.bashrc"
-        echo "if [ -x /usr/bin/zsh ]; then" >> "$HOME/.bashrc"
-        echo "    exec zsh" >> "$HOME/.bashrc"
-        echo "fi" >> "$HOME/.bashrc"
-    fi
-fi
-
 # Create secrets file template
 if [ ! -f "$HOME/.secrets" ]; then
     echo "Creating ~/.secrets template..."
@@ -386,9 +370,6 @@ echo "  - n: yazi file manager (with zoxide, session, fr, compress plugins)"
 echo "  - zl: zellij terminal multiplexer"
 echo ""
 echo "======================================"
-echo "Starting zsh now..."
+echo "To start using your new shell, run:"
+echo "  exec zsh"
 echo "======================================"
-echo ""
-
-# Switch to zsh automatically
-exec zsh
