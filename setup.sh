@@ -336,6 +336,11 @@ echo "Installing zellij configs..."
 mkdir -p "$HOME/.config/zellij/layouts"
 cp -r "$SCRIPT_DIR/.config/zellij/"* "$HOME/.config/zellij/"
 
+# Copy starship config
+echo "Installing starship config..."
+mkdir -p "$HOME/.config"
+cp "$SCRIPT_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
+
 # Set zsh as default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting zsh as default shell..."
@@ -382,6 +387,7 @@ echo "Installed configs:"
 echo "  - ~/.zshrc (shell configuration)"
 echo "  - ~/.config/yazi/ (file manager)"
 echo "  - ~/.config/zellij/ (terminal multiplexer)"
+echo "  - ~/.config/starship.toml (prompt theme)"
 echo "  - ~/.fzf.zsh (fuzzy finder keybindings)"
 echo "  - ~/.secrets (API keys template)"
 echo ""
