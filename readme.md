@@ -1,182 +1,104 @@
-# Linux Dotfiles
+# Linux dotfiles
 
-Public dotfiles for setting up a new Linux system (e.g., Hetzner bare metal server). This repo contains sanitized configs without any API keys or personal information.
+Dotfiles for setting up a new Linux system (e.g., Hetzner bare metal server). Sanitized configs without API keys or personal information.
 
-## Quick Setup Options
+## Quick setup
 
-### Option 1: Automated Hetzner Bootstrap (RECOMMENDED)
-
-**For fresh Hetzner servers in rescue mode** - just copy-paste this one command:
+### Option 1: Hetzner bootstrap (fresh server in rescue mode)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mpr1255/dotfiles/master/hetzner-bootstrap.sh | bash
 ```
 
-This single script will:
-- Set up RAID-0 across both NVMe drives
-- Install Ubuntu 24.04 via installimage
-- Create `ubuntu` user with your SSH key
-- Set up passwordless sudo
-- Clone and install all dotfiles automatically
-- Reboot into a fully configured system
+This sets up RAID-0, installs Ubuntu 24.04, creates `ubuntu` user with your SSH key, and installs all dotfiles. After reboot, SSH as `ubuntu@your-server-ip`.
 
-After it completes, just SSH as `ubuntu@your-server-ip` and everything works.
+### Option 2: Existing Linux system
 
-**After first login, verify setup:**
-
-```bash
-# Check if dotfiles installed
-ls ~/dotfiles
-
-# Check if tools installed
-which yazi zellij starship
-
-# If not installed, run manually:
-git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-./setup.sh
-exec $SHELL
-```
-
----
-
-### Option 2: Simple Setup (existing Linux system)
-
-If you already have a non-root user account with sudo access:
-
-**One-liner (download and run directly):**
+**One-liner:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mpr1255/dotfiles/master/setup.sh | bash
 ```
 
-**Or clone first (recommended - keeps dotfiles repo):**
+**Or clone first (recommended):**
 ```bash
 git clone https://github.com/mpr1255/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 bash setup.sh
-```
-
-**Then start zsh:**
-```bash
 exec zsh
 ```
 
-### Option 3: Manual Hetzner Setup (step-by-step)
+## What gets installed
 
-For a fresh Hetzner server where you need to create a user first:
+### System packages
+- zsh, git, curl, wget, neovim, build-essential
+- ripgrep, fd-find, bat, eza, fzf, zoxide
+- sqlite3, jq, iperf3, 7zip, mpv, w3m, rclone
+- Node.js, bun
 
-#### 1. Pre-setup (as root)
+### Rust/cargo tools
+- yazi (file manager)
+- zellij (terminal multiplexer)
+- ripgrep-all (rga)
+- files-to-prompt, ouch
 
-Copy-paste the following to create ubuntu user and install basics:
+### Other
+- starship (prompt)
+- mcfly (shell history)
+- uv (Python package manager)
+- devbox (portable dev environments)
 
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
+### Zsh plugins
+- zsh-autosuggestions
+- zsh-syntax-highlighting
+- fzf-tab, fzf-tab-completion
 
-# Only create ubuntu user if it doesn't exist
-if ! id "ubuntu" &>/dev/null; then
-    useradd -m -s /bin/bash ubuntu
-    usermod -aG sudo ubuntu
-    mkdir -p /etc/sudoers.d
-    echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu
-    chmod 0440 /etc/sudoers.d/ubuntu
-fi
+### Yazi plugins
+- zoxide, session, fr, compress, smart-enter, projects, dragon
 
-# Set up SSH keys for ubuntu user
-mkdir -p /home/ubuntu/.ssh
-cp /root/.ssh/authorized_keys /home/ubuntu/.ssh/
-chown -R ubuntu:ubuntu /home/ubuntu/.ssh
-chmod 700 /home/ubuntu/.ssh
-chmod 600 /home/ubuntu/.ssh/authorized_keys
+## Directory structure
 
-# Install packages
-apt-get update
-apt-get install -y curl git xz-utils systemd build-essential mosh
-
-echo "Setup complete! now dropping to ubuntu user"
-
-exec su - ubuntu
+```
+.
+├── hetzner-bootstrap.sh    # One-command Hetzner setup (RAID + OS + user + dotfiles)
+├── setup.sh                # Main setup script (idempotent, safe to re-run)
+├── setup-nosudocheck.sh    # Setup without sudo check (for special cases)
+├── pre-setup.sh            # Creates user, sets up SSH (fresh servers only)
+├── refresh_from_mac.sh     # Sync configs from Mac to repo
+├── linux.zshrc             # Zsh configuration for Linux
+├── .config/
+│   ├── starship.toml       # Prompt configuration
+│   ├── nvim/               # LazyVim configuration
+│   │   ├── init.lua
+│   │   └── lua/
+│   │       ├── config/     # options, keymaps, autocmds
+│   │       └── plugins/    # plugin configs
+│   ├── yazi/               # File manager configuration
+│   │   ├── yazi.toml       # Main config
+│   │   ├── keymap.toml     # Keybindings
+│   │   ├── init.lua
+│   │   ├── plugins/        # Bundled plugins
+│   │   └── flavors/        # Themes (catppuccin-mocha)
+│   └── zellij/
+│       ├── config.kdl      # Zellij configuration
+│       └── layouts/
+└── mac/                    # Mac-specific setup (Brewfile, etc.)
+    ├── Brewfile            # Homebrew packages
+    ├── install_plugins.sh  # Zsh/LazyVim plugin installer
+    └── readme.md           # Mac setup instructions
 ```
 
-#### 2. Main setup (as ubuntu user)
+## Keybindings
 
-Clone this repo and run setup:
+| Key | Action |
+|-----|--------|
+| `Ctrl+T` | fzf file search |
+| `Ctrl+R` | mcfly history search |
+| `n` | yazi file manager |
+| `zl` | zellij multiplexer |
 
-```bash
-# Clone and run setup
-git clone https://github.com/mpr1255/dotfiles.git dotfiles && cd dotfiles && chmod +x *.sh && ./setup.sh
+## API keys
 
-# Reload shell
-exec $SHELL
-
-# Optional: Install tailscale
-if ! command -v tailscale &> /dev/null; then
-    echo "Installing tailscale..."
-    curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up --ssh
-fi
-```
-
-## Contents
-
-- `hetzner-bootstrap.sh` - **[🚀 MAIN SCRIPT]** One-command Hetzner setup (RAID + OS + user + dotfiles)
-- `linux.zshrc` - Zsh configuration for Linux (no API keys)
-- `.config/yazi/` - Yazi file manager configuration
-- `.config/zellij/` - Zellij terminal multiplexer configuration
-- `pre-setup.sh` - **[Manual option]** Creates user, sets up SSH (for fresh servers only)
-- `setup.sh` - **[Run as user]** Installs all tools and configs (idempotent, safe to re-run)
-- `refresh_from_mac.sh` - **[Run on Mac]** Updates repo from Mac configs (idempotent)
-
-## Script Details
-
-### setup.sh (Main Setup Script)
-**Idempotent:** ✅ Yes, safe to run multiple times
-**Runs as:** Regular user (needs sudo access)
-**What it does:**
-- Install zsh and set it as default shell
-- Install modern CLI tools (eza, bat, fd, ripgrep, fzf, zoxide, etc.)
-- Install yazi, zellij, starship, mcfly
-- Set up zsh plugins
-- Copy configs to `~/.zshrc`, `~/.config/yazi/`, `~/.config/zellij/`
-- Create a `~/.secrets` file template for API keys
-
-### pre-setup.sh (Initial Server Setup)
-**Idempotent:** ✅ Yes, safe to run multiple times
-**Runs as:** Root
-**When to use:** Only needed on fresh Hetzner/bare metal servers where you need to create a non-root user
-**What it does:**
-- Creates `ubuntu` user with sudo access (skips if already exists)
-- Copies SSH keys from root (skips if already exist)
-- Installs basic packages: curl, git, build-essential, mosh
-- Switches to ubuntu user
-
-### refresh_from_mac.sh (Config Sync Script)
-**Idempotent:** ✅ Yes, safe to run multiple times
-**Runs as:** Regular user
-**Runs on:** Mac only
-**What it does:**
-- Copies yazi and zellij configs from `~/.config/` to repo
-- Automatically sanitizes configs for Linux:
-  - Replaces Sublime Text paths with `$EDITOR`
-  - Replaces `open` commands with `xdg-open`
-  - Removes personal paths and info
-- Ready to commit after running
-
-## Updating Configs from Mac
-
-When you update your configs on Mac and want to sync them to the repo:
-
-```bash
-cd ~/bin/dotfiles
-./refresh_from_mac.sh
-git add .
-git commit -m "Update configs from Mac"
-git push
-```
-
-## API Keys
-
-The `linux.zshrc` file will source `~/.secrets` if it exists. Add your API keys there:
+The setup creates `~/.secrets` which is sourced by `.zshrc`. Add your keys there:
 
 ```bash
 # ~/.secrets
@@ -184,66 +106,22 @@ export OPENAI_API_KEY="your-key-here"
 export ANTHROPIC_API_KEY="your-key-here"
 ```
 
-Make sure to set proper permissions:
+Set proper permissions: `chmod 600 ~/.secrets`
+
+## Updating configs from Mac
+
 ```bash
-chmod 600 ~/.secrets
+cd ~/bin/dotfiles
+./refresh_from_mac.sh
+git add -A && git commit -m "Update configs from Mac"
+git push
 ```
 
-## Installed Tools
+## Scripts
 
-### Package Manager Tools
-- zsh, git, curl, wget, neovim
-- ripgrep (rg), fd-find, bat, eza, fzf, zoxide
-- sqlite3, 7zip, mpv, w3m
-
-### Rust/Cargo Tools
-- yazi (file manager)
-- zellij (terminal multiplexer)
-- ripgrep-all (rga)
-- files-to-prompt
-
-### Python/pipx Tools
-- sqlite-utils
-- uv (Python package manager)
-
-### Other
-- starship (prompt)
-- mcfly (shell history)
-
-### Zsh Plugins
-- zsh-autosuggestions
-- zsh-syntax-highlighting
-- zsh-fzf-tab
-- fzf-tab-completion
-
-### Yazi Plugins
-- zoxide, session, fr (fuzzy find), smart-enter, compress
-
-**Note:** The setup script attempts to install yazi plugins using `ya pack`. If it fails, install them manually:
-```bash
-ya pack -a yazi-rs/plugins:zoxide
-ya pack -a yazi-rs/plugins:session
-ya pack -a yazi-rs/plugins:fr
-ya pack -a yazi-rs/plugins:compress
-ya pack -a ourongxing/smart-enter
-```
-
-## Directory Structure
-
-```
-.
-├── readme.md
-├── linux.zshrc              # Sanitized zshrc for Linux
-├── setup.sh                 # Setup script for new systems
-├── refresh_from_mac.sh      # Update repo from Mac
-└── .config/
-    ├── yazi/
-    │   ├── init.lua
-    │   ├── keymap.toml
-    │   ├── yazi.toml
-    │   └── theme.toml
-    └── zellij/
-        ├── config.kdl
-        └── layouts/
-            └── default.kdl
-``` 
+| Script | Purpose | Idempotent |
+|--------|---------|------------|
+| `setup.sh` | Main setup (as user with sudo) | Yes |
+| `hetzner-bootstrap.sh` | Full Hetzner setup from rescue mode | Yes |
+| `pre-setup.sh` | Create user + SSH (as root) | Yes |
+| `refresh_from_mac.sh` | Sync Mac configs to repo | Yes |

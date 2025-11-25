@@ -139,10 +139,10 @@ on = [ "g", "n" ]
 run = "cd ~/notes"
 desc = "Go to the notes directory"
 
-[[mgr.prepend_keymap]]
-on = [ "g", "f" ]
-run = "cd /Volumes/t7/folders"
-desc = "Go to the folders directory"
+# [[mgr.prepend_keymap]]
+# on = [ "g", "f" ]
+# run = "cd /Volumes/t7/folders"
+# desc = "Go to the folders directory (Mac-specific, customize as needed)"
 
 # [[manager.prepend_keymap]]
 # on = [ "r" ]  
